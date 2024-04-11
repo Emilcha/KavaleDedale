@@ -1,0 +1,3 @@
+@echo off
+echo Démarage de l'instalation...
+pip install pygame
