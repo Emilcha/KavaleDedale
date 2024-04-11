@@ -17,3 +17,6 @@ Un labyrinthe en python :snake:
 - [ ] Parametres
 - [ ] Menu Principal
 - [ ] Class Entity
+
+## Credits
+- [RayCasting Algorithm](https://lodev.org/cgtutor/raycasting.html)
