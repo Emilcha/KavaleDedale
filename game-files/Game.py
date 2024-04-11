@@ -2,6 +2,9 @@ from Global import *
 
 from Render import Render
 from Joueur import Joueur
+from Settings import Settings
+from Input import InputHandler
+from HUD import HUD
 import Maps
 
 class Game:
@@ -12,31 +15,34 @@ class Game:
         self.pygame_screen = pygame.display.get_surface()
         self.pygame_clock = pygame.time.Clock()
 
+        self.settings = Settings()
+        self.input = InputHandler(self)
         self.carte = map_array
         self.renderer = Render(self)
         self.joueur = Joueur(self)
+        self.hud = HUD(self)
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
-
         self.running = True
-        self.max_fps = 60
 
     def __del__(self):
         pygame.quit()
 
     def gameLoop(self):
         while(self.running):
-            self.event_dispatcher()
+            self.update_ents()
             self.pygame_screen.fill(pygame.Color(0, 0, 0)) # TODO : Haut bleu, bas noir
-            self.renderer.rendu()
-            self.pygame_clock.tick(self.max_fps)
+            self.rendu()
+            self.pygame_clock.tick(self.settings["maxfps"])
             pygame.display.update()
 
-    def event_dispatcher(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
+    def update_ents(self):
         self.joueur.update()
+
+    def rendu(self):
+        self.renderer.rendu()
+        self.hud.rendu()
+        
 
 
 JeuLabyrinthe = Game(Maps.playground,(2,2))
