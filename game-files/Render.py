@@ -92,3 +92,6 @@ class Render:
                              pygame.Color(r,g,b),
                              (scr_w, lineStart),
                              (scr_w, lineEnd))
+
+    def cpyHud(self, hud_surface):
+        self.game.pygame_screen.blit(hud_surface, (0,0))

@@ -30,6 +30,7 @@ class Game:
 
     def gameLoop(self):
         while(self.running):
+            print("loop")
             self.update_ents()
             self.pygame_screen.fill(pygame.Color(0, 0, 0)) # TODO : Haut bleu, bas noir
             self.rendu()
@@ -41,7 +42,7 @@ class Game:
 
     def rendu(self):
         self.renderer.rendu()
-        self.hud.rendu()
+        self.renderer.cpyHud(self.hud.rendu())
         
 
 

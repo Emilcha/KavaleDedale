@@ -10,10 +10,13 @@ class InputHandler:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+                continue
             if event.type == pygame.KEYDOWN:
                 self.keys[event.key] = True
-            if event.type == pygame.KEYDOWN:
+                continue
+            if event.type == pygame.KEYUP:
                 self.keys[event.key] = False
+                continue
 
     def isPressed(self, key):
         if self.input_enabled:
