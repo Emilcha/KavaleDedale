@@ -1,3 +1,4 @@
 @echo off
 echo Démarage de l'instalation...
-pip install pygame
+pip install -r requirements.txt
+pause
