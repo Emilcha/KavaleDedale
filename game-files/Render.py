@@ -93,5 +93,5 @@ class Render:
                              (scr_w, lineStart),
                              (scr_w, lineEnd))
 
-    def cpyHud(self, hud_surface):
-        self.game.pygame_screen.blit(hud_surface, (0,0))
+    def add(self, surface_to_add):
+        self.game.pygame_screen.blit(surface_to_add, (0,0))

@@ -30,19 +30,19 @@ class Game:
 
     def gameLoop(self):
         while(self.running):
-            print("loop")
-            self.update_ents()
+            self.events()
             self.pygame_screen.fill(pygame.Color(0, 0, 0)) # TODO : Haut bleu, bas noir
             self.rendu()
             self.pygame_clock.tick(self.settings["maxfps"])
             pygame.display.update()
 
-    def update_ents(self):
+    def events(self):
+        self.input.pollEvents()
         self.joueur.update()
 
     def rendu(self):
         self.renderer.rendu()
-        self.renderer.cpyHud(self.hud.rendu())
+        self.renderer.add(self.hud.rendu())
         
 
 
