@@ -46,12 +46,12 @@ class Joueur:
 
     def update(self):
         if self.game.input.isPressed(self.game.settings["key_forward"]):
-            goForward()
+            self.goForward()
         if self.game.input.isPressed(self.game.settings["key_backward"]):
-            goBackward()
+            self.goBackward()
         if self.game.input.isPressed(self.game.settings["key_right"]):
-            goRight()
+            self.goRight()
         if self.game.input.isPressed(self.game.settings["key_left"]):
-            goLeft()
+            self.goLeft()
         if self.game.input.isPressed(self.game.settings["key_attack"]):
-            attack()
+            self.attack()
