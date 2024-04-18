@@ -11,35 +11,45 @@ class Joueur:
         self.camPlaneX = 0
         self.camPlaneY = 0.66
 
+    def getSpeed(self):
+        '''
+        if self.game.input.isPressed(self.game.settings["key_sprint"]):
+            return self.game.settings["move_speed_sprinting"]
+        else:
+        '''
+        return self.game.settings["move_speed"]
+
     def goForward(self):
-        if self.game.carte[int(self.x + self.dirX * self.game.settings["movespeed"])][int(self.y)] == 0:
-            self.x += self.dirX * self.game.settings["movespeed"]
-        if self.game.carte[int(self.x)][int(self.y + self.dirY * self.game.settings["movespeed"])] == 0:
-            self.y += self.dirY * self.game.settings["movespeed"]
+        speed = self.getSpeed()
+        if self.game.carte[int(self.x + self.dirX * speed)][int(self.y)] == 0:
+            self.x += self.dirX * speed
+        if self.game.carte[int(self.x)][int(self.y + self.dirY * speed)] == 0:
+            self.y += self.dirY * speed
                 
     def goBackward(self):
-        if self.game.carte[int(self.x - self.dirX * self.game.settings["movespeed"])][int(self.y)] == 0:
-            self.x -= self.dirX * self.game.settings["movespeed"]
-        if self.game.carte[int(self.x)][int(self.y - self.dirY * self.game.settings["movespeed"])] == 0:
-            self.y -= self.dirY * self.game.settings["movespeed"]
+        speed = self.getSpeed()
+        if self.game.carte[int(self.x - self.dirX * speed)][int(self.y)] == 0:
+            self.x -= self.dirX * speed
+        if self.game.carte[int(self.x)][int(self.y - self.dirY * speed)] == 0:
+            self.y -= self.dirY * speed
 
-    def goLeft(self):
+    def lookLeft(self):
         oldDirX = self.dirX
-        self.dirX = self.dirX * math.cos(self.game.settings["rotatespeed"]) - self.dirY * math.sin(self.game.settings["rotatespeed"])
-        self.dirY = oldDirX * math.sin(self.game.settings["rotatespeed"]) + self.dirY * math.cos(self.game.settings["rotatespeed"])
+        self.dirX = self.dirX * math.cos(self.game.settings["rotate_speed"]) - self.dirY * math.sin(self.game.settings["rotate_speed"])
+        self.dirY = oldDirX * math.sin(self.game.settings["rotate_speed"]) + self.dirY * math.cos(self.game.settings["rotate_speed"])
         
         oldPlaneX = self.camPlaneX
-        self.camPlaneX = self.camPlaneX * math.cos(self.game.settings["rotatespeed"]) - self.camPlaneY * math.sin(self.game.settings["rotatespeed"])
-        self.camPlaneY = oldPlaneX * math.sin(self.game.settings["rotatespeed"]) + self.camPlaneY * math.cos(self.game.settings["rotatespeed"])
+        self.camPlaneX = self.camPlaneX * math.cos(self.game.settings["rotate_speed"]) - self.camPlaneY * math.sin(self.game.settings["rotate_speed"])
+        self.camPlaneY = oldPlaneX * math.sin(self.game.settings["rotate_speed"]) + self.camPlaneY * math.cos(self.game.settings["rotate_speed"])
 
-    def goRight(self):
+    def lookRight(self):
         oldDirX = self.dirX
-        self.dirX = self.dirX * math.cos(-self.game.settings["rotatespeed"]) - self.dirY * math.sin(-self.game.settings["rotatespeed"])
-        self.dirY = oldDirX * math.sin(-self.game.settings["rotatespeed"]) + self.dirY * math.cos(-self.game.settings["rotatespeed"])
+        self.dirX = self.dirX * math.cos(-self.game.settings["rotate_speed"]) - self.dirY * math.sin(-self.game.settings["rotate_speed"])
+        self.dirY = oldDirX * math.sin(-self.game.settings["rotate_speed"]) + self.dirY * math.cos(-self.game.settings["rotate_speed"])
         
         oldPlaneX = self.camPlaneX
-        self.camPlaneX = self.camPlaneX * math.cos(-self.game.settings["rotatespeed"]) - self.camPlaneY * math.sin(-self.game.settings["rotatespeed"])
-        self.camPlaneY = oldPlaneX * math.sin(-self.game.settings["rotatespeed"]) + self.camPlaneY * math.cos(-self.game.settings["rotatespeed"])
+        self.camPlaneX = self.camPlaneX * math.cos(-self.game.settings["rotate_speed"]) - self.camPlaneY * math.sin(-self.game.settings["rotate_speed"])
+        self.camPlaneY = oldPlaneX * math.sin(-self.game.settings["rotate_speed"]) + self.camPlaneY * math.cos(-self.game.settings["rotate_speed"])
 
     def attack(self):
         pass
@@ -50,8 +60,8 @@ class Joueur:
         if self.game.input.isPressed(self.game.settings["key_backward"]):
             self.goBackward()
         if self.game.input.isPressed(self.game.settings["key_right"]):
-            self.goRight()
+            self.lookRight()
         if self.game.input.isPressed(self.game.settings["key_left"]):
-            self.goLeft()
+            self.lookLeft()
         if self.game.input.isPressed(self.game.settings["key_attack"]):
             self.attack()

@@ -4,7 +4,12 @@ class InputHandler:
     def __init__(self, game):
         self.game = game
         self.input_enabled = True
-        self.keys = [False]*324
+        self.keys = list(pygame.key.get_pressed())
+
+    def __convertKeyNum(self, num):
+        # https://github.com/pygame/pygame/blob/main/src_c/key.c -> pg_key_and_name[]
+        if num >= 1073741881:
+            num -= 1073742009   # 1073741881 + 128
 
     def pollEvents(self):
         for event in pygame.event.get():
