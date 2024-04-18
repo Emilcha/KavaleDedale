@@ -9,25 +9,29 @@ class InputHandler:
     def __convertKeyNum(self, num):
         # https://github.com/pygame/pygame/blob/main/src_c/key.c -> pg_key_and_name[]
         if num >= 1073741881:
-            num -= 1073742009   # 1073741881 + 128
+            num -= 1073741881 - 128
+        return num
 
     def pollEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.game.running = False
-                continue
-            if event.type == pygame.KEYDOWN:
-                print("up", event.key)
-                self.keys[event.key] = True
-                continue
-            if event.type == pygame.KEYUP:
-                print("down", event.key)
-                self.keys[event.key] = False
-                continue
+
+            elif event.type == pygame.KEYDOWN:
+                keyCode = self.__convertKeyNum(event.key)
+                print("up", keyCode)
+                self.keys[keyCode] = True
+
+            elif event.type == pygame.KEYUP:
+                keyCode = self.__convertKeyNum(event.key)
+                print("down", keyCode)
+                self.keys[keyCode] = False
 
     def isPressed(self, key):
         if self.input_enabled:
+            key = self.__convertKeyNum(key)
             return self.keys[key]
 
     def isPressedBypass(self, key):
+        key = self.__convertKeyNum(key)
         return self.keys[key]

@@ -11,12 +11,15 @@ class Joueur:
         self.camPlaneX = 0
         self.camPlaneY = 0.66
 
+        self.canRun = True
+        self.stamina = 1
+
     def getSpeed(self):
-        '''
-        if self.game.input.isPressed(self.game.settings["key_sprint"]):
+        if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
+            self.stamina -= 0.01
+            if self.stamina<=0:
+                self.canRun = False
             return self.game.settings["move_speed_sprinting"]
-        else:
-        '''
         return self.game.settings["move_speed"]
 
     def goForward(self):
@@ -55,6 +58,13 @@ class Joueur:
         pass
 
     def update(self):
+        if self.stamina<1:
+            self.stamina += 0.005
+        else:
+            self.stamina = 1
+            self.canRun = True
+
+
         if self.game.input.isPressed(self.game.settings["key_forward"]):
             self.goForward()
         if self.game.input.isPressed(self.game.settings["key_backward"]):

@@ -4,15 +4,19 @@ class HUD:
     def __init__(self, game):
         self.game = game
         self.hudSurface = pygame.Surface((WIDTH, HEIGHT), flags=pygame.SRCALPHA)
-        self.DemoFont = FontManager(fontName="Lucida Console", size=25)
-        self.DemoText = TextManager(self.DemoFont, "Hello Wold", pygame.Color(255,255,255))
+        self.Lucida_Console = FontManager(fontName="Lucida Console", size=25)
 
     def getSurface(self):
         return self.hudSurface
 
     def rendu(self):
         self.hudSurface.fill(pygame.Color(0,0,0,0))
-        self.DemoText.drawText(self.hudSurface, 0, 0)
+
+        self.Lucida_Console.textToSurface(self.hudSurface,
+            f"Stamina | {str(int(self.game.joueur.stamina * 100))}",
+            0, 0,
+            pygame.Color(10,255,120))
+
         return self.hudSurface
 
 class FontManager:
@@ -22,7 +26,8 @@ class FontManager:
         elif fontFile != None:
             self.font = pygame.font.Font(fontFile, size)
         else:
-            return self.__del__()
+            del self
+            return
 
         self.antialiasing = antialiasing
 
@@ -36,20 +41,6 @@ class FontManager:
         if striketrough != None:
             self.font.striketrough = striketrough
 
-    def getSurface(self, text, color, background):
-        return self.font.render(text, self.antialiasing, color, background)
-
-class TextManager:
-    def __init__(self, font, text, color, background=None):
-        self.font = font
-        self.text = text
-        self.color = color
-        self.background = background
-
-        self.rendered_text = self.font.getSurface(self.text, self.color, self.background)
-
-    def drawText(self, surface, x, y):
-        surface.blit(self.rendered_text, (x,y))
-
-    def renderText(self):
-        self.rendered_text = self.font.getSurface(self.text, self.color, self.background)
+    def textToSurface(self, surface, text, x, y, color, background=None):
+        fontSurface = self.font.render(text, self.antialiasing, color, background)
+        surface.blit(fontSurface, (x, y))

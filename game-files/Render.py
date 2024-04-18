@@ -3,6 +3,7 @@ from Global import *
 class Render:
     def __init__(self, game):
         self.game = game
+
     def rendu(self):
         for scr_w in range(WIDTH):
             cameraX = 2 * scr_w / WIDTH - 1
@@ -12,12 +13,12 @@ class Render:
             mapX = int(self.game.joueur.x)
             mapY = int(self.game.joueur.y)
 
-            if rayDirX !=0:
+            if rayDirX != 0:
                 deltaDistX = abs(1/rayDirX)
             else:
                 deltaDistX = 10000000000000  #inf
 
-            if rayDirY !=0:
+            if rayDirY != 0:
                 deltaDistY = abs(1/rayDirY)
             else:
                 deltaDistY = 10000000000000  #inf
@@ -54,8 +55,6 @@ class Render:
 
             if side == 0: wallDist = sideDistX - deltaDistX
             else: wallDist = sideDistY - deltaDistY
-            
-            #print(f"{scr_w}: dist {wallDist}")
             
             lineHeight = HEIGHT // wallDist
 
