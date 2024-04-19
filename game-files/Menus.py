@@ -10,6 +10,7 @@ class MenuESC:
         self.MenuFont = FontManager(fontName="Lucida Console", size=25)
         self.MenuFont.setEffects(bold=True, underline=True)
         self.Quiter = Button(self.game, "Quiter", self.MenuFont, pygame.Color(200,20,20), pygame.Rect(WIDTH/2-50,HEIGHT-100,100,50), self.quitGame)
+
     def rendu(self):
         if self.open == True:
             self.hudSurface.fill(pygame.Color(0,0,0,150))
@@ -17,4 +18,5 @@ class MenuESC:
             self.Quiter.draw(self.hudSurface)
 
     def quitGame(self):
-        self.game.running = False
+        if self.open:
+            self.game.running = False
