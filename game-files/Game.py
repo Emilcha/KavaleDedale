@@ -23,7 +23,9 @@ class Game:
         self.hud = HUD(self)
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
+
         self.running = True
+        self.isPlaying = True
 
     def __del__(self):
         pygame.quit()
@@ -31,14 +33,17 @@ class Game:
     def gameLoop(self):
         while(self.running):
             self.events()
-            self.pygame_screen.fill(pygame.Color(0, 0, 0)) # TODO : Haut bleu, bas noir
+            self.pygame_screen.fill(pygame.Color(0, 0, 0), rect=pygame.Rect(0, 0, WIDTH, HEIGHT//2))
+            self.pygame_screen.fill(pygame.Color(40, 40, 40), rect=pygame.Rect(0, HEIGHT//2, WIDTH, HEIGHT//2))
             self.rendu()
             self.pygame_clock.tick(self.settings["maxfps"])
             pygame.display.update()
 
     def events(self):
         self.input.pollEvents()
-        self.joueur.update()
+
+        if self.isPlaying:          # Si aucun menu ouvert
+            self.joueur.update()
 
     def rendu(self):
         self.renderer.rendu()
