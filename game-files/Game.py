@@ -48,9 +48,12 @@ class Game:
     def rendu(self):
         self.renderer.rendu()
         self.renderer.add(self.hud.rendu())
-        
 
+    def changerMap(self, new_map, playerPos):
+        self.carte = new_map
+        self.joueur.x = playerPos[0]
+        self.joueur.y = playerPos[1]
 
-JeuLabyrinthe = Game(Maps.playground,(2,2))
+JeuLabyrinthe = Game(Maps.example,(6,6))
 JeuLabyrinthe.gameLoop()
 del JeuLabyrinthe

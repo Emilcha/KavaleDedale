@@ -32,6 +32,9 @@ class FontManager:
         surface.blit(fontSurface, (x - fontSurface.get_width()//2, y - fontSurface.get_height()//2))
 
 
+
+
+
 class Button:
     def __init__(self, game, text, font: FontManager, color: pygame.Color, rect: pygame.Rect, callback):
         self.text = text

@@ -13,6 +13,7 @@ class Joueur:
 
         self.canRun = True
         self.stamina = 1
+        self.noclip = False
 
     def getSpeed(self):
         if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
@@ -24,17 +25,21 @@ class Joueur:
 
     def goForward(self):
         speed = self.getSpeed()
-        if self.game.carte[int(self.x + self.dirX * speed)][int(self.y)] == 0:
-            self.x += self.dirX * speed
-        if self.game.carte[int(self.x)][int(self.y + self.dirY * speed)] == 0:
-            self.y += self.dirY * speed
+        if not (int(self.x + self.dirX * speed)<0 or int(self.x + self.dirX * speed)>=len(self.game.carte)):
+            if self.game.carte[int(self.x + self.dirX * speed)][int(self.y)] == 0 or self.noclip:
+                self.x += self.dirX * speed
+        if not (int(self.y + self.dirY * speed)<0 or int(self.y + self.dirY * speed)>=len(self.game.carte[int(self.x)])):
+            if self.game.carte[int(self.x)][int(self.y + self.dirY * speed)] == 0 or self.noclip:
+                self.y += self.dirY * speed
                 
     def goBackward(self):
         speed = self.getSpeed()
-        if self.game.carte[int(self.x - self.dirX * speed)][int(self.y)] == 0:
-            self.x -= self.dirX * speed
-        if self.game.carte[int(self.x)][int(self.y - self.dirY * speed)] == 0:
-            self.y -= self.dirY * speed
+        if not (int(self.x - self.dirX * speed)<0 or int(self.x - self.dirX * speed)>=len(self.game.carte)):
+            if self.game.carte[int(self.x - self.dirX * speed)][int(self.y)] == 0 or self.noclip:
+                self.x -= self.dirX * speed
+        if not (int(self.y - self.dirY * speed)<0 or int(self.y - self.dirY * speed)>=len(self.game.carte[int(self.x)])):
+            if self.game.carte[int(self.x)][int(self.y - self.dirY * speed)] == 0 or self.noclip:
+                self.y -= self.dirY * speed
 
     def lookLeft(self):
         oldDirX = self.dirX

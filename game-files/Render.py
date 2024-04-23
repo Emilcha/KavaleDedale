@@ -50,12 +50,16 @@ class Render:
                     mapY += stepY
                     side = 1
 
+                if mapX < 0 or mapY < 0 or mapX >= len(self.game.carte) or mapY >= len(self.game.carte[mapX]): break # En dehors de la carte
                 if self.game.carte[mapX][mapY]:
                     hit = 1
+            if hit==0: continue # En dehors de la carte
 
             if side == 0: wallDist = sideDistX - deltaDistX
             else: wallDist = sideDistY - deltaDistY
             
+            if wallDist==0: continue
+
             lineHeight = HEIGHT // wallDist
 
             lineStart = -lineHeight/2 + HEIGHT/2

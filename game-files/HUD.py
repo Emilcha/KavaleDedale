@@ -23,11 +23,21 @@ class HUD:
 
     def rendu(self):
         self.hudSurface.fill(pygame.Color(0,0,0,0))
-
+        
+        self.Lucida_Console.textToSurface(self.hudSurface,
+            f"X | {str(self.game.joueur.x)}",
+            0, HEIGHT - 150,
+            pygame.Color(10,255,120))
+        self.Lucida_Console.textToSurface(self.hudSurface,
+            f"Y | {str(self.game.joueur.y)}",
+            0, HEIGHT - 125,
+            pygame.Color(10,255,120))
         self.Lucida_Console.textToSurface(self.hudSurface,
             f"Stamina | {str(int(self.game.joueur.stamina * 100))}",
             0, HEIGHT - 100,
             pygame.Color(10,255,120))
+        
+
 
         self.menu.rendu()
 
