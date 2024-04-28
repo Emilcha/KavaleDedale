@@ -38,6 +38,8 @@ class HUD:
             pygame.Color(10,255,120))
         
 
+        #TODO: Barre de vie rendu -> blit sur hudSurface
+
 
         self.menu.rendu()
 

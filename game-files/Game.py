@@ -5,6 +5,7 @@ from Joueur import Joueur
 from Settings import Settings
 from Input import InputHandler
 from HUD import HUD
+from Entity import Entity_Handler, Entity
 import Maps
 
 class Game:
@@ -19,10 +20,15 @@ class Game:
         self.input = InputHandler(self)
         self.carte = map_array
         self.renderer = Render(self)
+
         self.joueur = Joueur(self)
         self.hud = HUD(self)
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
+
+        self.ents = Entity_Handler()
+
+        self.ents.add_entity(Entity("barrel", 5, 5.2, "game-files/img/test.png"))
 
         self.running = True
         self.isPlaying = True
@@ -47,6 +53,7 @@ class Game:
 
     def rendu(self):
         self.renderer.rendu()
+        self.renderer.rendu_entite()
         self.renderer.add(self.hud.rendu())
 
     def changerMap(self, new_map, playerPos):
@@ -54,6 +61,6 @@ class Game:
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
 
-JeuLabyrinthe = Game(Maps.example,(6,6))
+JeuLabyrinthe = Game(Maps.rooms, (6,6))
 JeuLabyrinthe.gameLoop()
 del JeuLabyrinthe
