@@ -28,7 +28,10 @@ class Game:
 
         self.ents = Entity_Handler()
 
-        self.ents.add_entity(Entity("barrel", 5, 5.2, "game-files/img/test.png"))
+
+        # Test d'entité
+        for i in range(5):
+            self.ents.add_entity(Entity(f"barrel{i}", 5, 4 + 0.5 * i, "game-files/img/test.png"))
 
         self.running = True
         self.isPlaying = True

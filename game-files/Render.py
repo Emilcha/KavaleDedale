@@ -12,7 +12,7 @@ class Render:
         for paire in sorted_ent:
             ent = self.game.ents.get_entity(paire[0])
             dist = paire[1] # Distance au joueur
-            if dist < 0.05: continue
+            if dist < 0.07: continue
 
             # Position relative à la caméra
             rel_pos_x = ent.x - joueur.x
@@ -70,7 +70,7 @@ class Render:
                         offset_start = -1
                 i += 1
             if offset_start != -1:
-                draw_offsets.append((offset_start, i))
+                draw_offsets.append((offset_start, drawEndX - drawStartX))
             if len(draw_offsets) == 0:
                 continue    # PASSE AU SPRITE SUIVANT
 
