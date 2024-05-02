@@ -6,6 +6,7 @@ from Settings import Settings
 from Input import InputHandler
 from HUD import HUD
 from Entity import Entity_Handler, Entity
+from Enemies import TrucMechant, FantomeBizare
 import Maps
 
 class Game:
@@ -28,11 +29,11 @@ class Game:
 
         self.ents = Entity_Handler()
 
-
-        # Test d'entité
-        for i in range(5):
-            self.ents.add_entity(Entity(f"barrel{i}", 5, 4 + 0.5 * i, "game-files/img/test.png"))
-
+        """for i in range(20):
+            self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
+		"""
+        self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
+        self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
         self.running = True
         self.isPlaying = True
 
@@ -53,6 +54,7 @@ class Game:
 
         if self.isPlaying:          # Si aucun menu ouvert
             self.joueur.update()
+            self.ents.update_ents()
 
     def rendu(self):
         self.renderer.rendu()

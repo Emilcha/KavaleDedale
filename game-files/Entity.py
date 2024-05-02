@@ -1,11 +1,43 @@
 from Global import *
 
 class Entity:
-    def __init__(self, name, x, y, texture_file):
+    def __init__(self,game, name, hp, pos, texture_file):
+        self.game = game
+        
         self.name = name
-        self.x = x
-        self.y = y
-        self.texture = pygame.image.load(texture_file)
+
+        if texture_file != None:
+            self.texture = pygame.image.load(texture_file)
+        
+        self.x = pos[0]
+        self.y = pos[1]
+        
+        self.health = hp
+        self.content = []
+
+        self.tick_count = 0
+        self.alive = True
+        
+        self.direction = 0
+
+    def get_texture(self):
+        return self.texture
+
+    def kill(self):
+        self.alive = False
+
+    def attack(self):
+        pass
+
+    def move(self):
+        pass
+
+    def update(self):
+        self.tick_count += 1
+        if self.health == 0:
+            self.kill()
+        else:
+            self.move()
 
 
 class Entity_Handler:
@@ -37,3 +69,7 @@ class Entity_Handler:
         # [(0, 0.2), (3, 1.4)]
         sorted_ent_index = [(key, dist) for key, dist in sorted(dist.items(), reverse=True, key=lambda item: item[1])]
         return sorted_ent_index
+    
+    def update_ents(self):
+        for ent in self.entitys:
+            ent.update()

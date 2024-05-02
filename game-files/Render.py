@@ -22,10 +22,14 @@ class Render:
 
             transformX = inv_det * (joueur.dirY * rel_pos_x - joueur.dirX * rel_pos_y)
             transformY = inv_det * (-joueur.camPlaneY * rel_pos_x + joueur.camPlaneX * rel_pos_y)
-
+            
+            if transformY <= 0: continue
+            
             spriteScreenX = int((WIDTH / 2) * (1 + transformX / transformY))
 
             spriteHeight = abs(int(HEIGHT / (transformY)))
+			
+            if spriteHeight >= 5*HEIGHT: continue
 
             offY = 0
             drawStartY = -spriteHeight / 2 + HEIGHT / 2
@@ -36,7 +40,10 @@ class Render:
             if drawEndY >= HEIGHT : drawEndY = HEIGHT - 1
 
             spriteWidth = abs( int(HEIGHT / (transformY)))
-
+            
+            if spriteHeight > 10000 or spriteWidth > 10000: # FIX FOR OUT OF MEMORY
+                continue            
+            
             offX = 0
             drawStartX = -spriteWidth / 2 + spriteScreenX
             drawEndX = spriteWidth / 2 + spriteScreenX
@@ -44,11 +51,9 @@ class Render:
                 offX = abs(drawStartX)
                 drawStartX = 0
             if drawEndX >= WIDTH : drawEndX = WIDTH - 1
-
-
-            if transformY < 0: continue
-            if drawStartX > WIDTH: continue
-            if drawEndX < 0: continue
+            
+            if drawStartX >= WIDTH: continue
+            if drawEndX <= 0: continue
 
             draw_offsets = []
             i = 0
@@ -73,8 +78,8 @@ class Render:
                 draw_offsets.append((offset_start, drawEndX - drawStartX))
             if len(draw_offsets) == 0:
                 continue    # PASSE AU SPRITE SUIVANT
-
-            ent_surface_scale = pygame.transform.scale(ent.texture, (spriteWidth, spriteHeight))
+            
+            ent_surface_scale = pygame.transform.scale(ent.get_texture(), (spriteWidth, spriteHeight))
 
             
 
