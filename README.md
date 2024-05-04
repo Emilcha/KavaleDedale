@@ -13,10 +13,12 @@ Un labyrinthe en python :snake:
 ## A faire
 - [ ] Texture sur les murs
 - [X] Sprites enemies
-- [0] HUD
+- [X] HUD
 - [X] Parametres
 - [ ] Menu Principal
-- [0] Class Entity
+- [X] Class Entity
+- [ ] Minimap
+- [ ] Florcasting
 
 ## Credits
 - [RayCasting Algorithm](https://lodev.org/cgtutor/raycasting.html)
