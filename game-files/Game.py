@@ -7,6 +7,7 @@ from Input import InputHandler
 from HUD import HUD
 from Entity import Entity_Handler, Entity
 from Enemies import TrucMechant, FantomeBizare
+from GenerationLaby import Labyrinthe
 import Maps
 
 class Game:
@@ -29,11 +30,11 @@ class Game:
 
         self.ents = Entity_Handler()
 
-        """for i in range(20):
-            self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
-		"""
-        self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
-        self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
+        #for i in range(100):
+        #    self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
+		
+        #self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
+        #self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
         self.running = True
         self.isPlaying = True
 
@@ -50,6 +51,7 @@ class Game:
             pygame.display.update()
 
     def events(self):
+        pygame.display.set_caption(f"{self.pygame_clock.get_fps() : .1f}")
         self.input.pollEvents()
 
         if self.isPlaying:          # Si aucun menu ouvert
@@ -65,6 +67,13 @@ class Game:
         self.carte = new_map
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
+
+    def nouveauLaby(self):
+        laby = Labyrinthe(4,4)
+        laby.genereLaby()
+        self.changerMap(laby.getMap(),(1,1))
+        del laby
+
 
 JeuLabyrinthe = Game(Maps.rooms, (6,6))
 JeuLabyrinthe.gameLoop()
