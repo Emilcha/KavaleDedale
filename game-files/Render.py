@@ -3,6 +3,89 @@ from Global import *
 class Render:
     def __init__(self, game):
         self.game = game
+        self.z_buffer = [None for i in range(WIDTH)]
+
+    def rendu_entite(self):
+        sorted_ent = self.game.ents.index_sorted_dist(self.game.joueur)
+        joueur = self.game.joueur
+
+        for paire in sorted_ent:
+            ent = self.game.ents.get_entity(paire[0])
+            dist = paire[1] # Distance au joueur
+            if dist < 0.07: continue
+
+            # Position relative à la caméra
+            rel_pos_x = ent.x - joueur.x
+            rel_pos_y = ent.y - joueur.y
+            # Déterminant de la matrice joueur inversé
+            inv_det = 1 / (joueur.camPlaneX * joueur.dirY - joueur.dirX * joueur.camPlaneY)
+
+            transformX = inv_det * (joueur.dirY * rel_pos_x - joueur.dirX * rel_pos_y)
+            transformY = inv_det * (-joueur.camPlaneY * rel_pos_x + joueur.camPlaneX * rel_pos_y)
+            
+            if transformY <= 0: continue
+            
+            spriteScreenX = int((WIDTH / 2) * (1 + transformX / transformY))
+
+            spriteHeight = abs(int(HEIGHT / (transformY)))
+			
+            if spriteHeight >= 5*HEIGHT: continue
+
+            offY = 0
+            drawStartY = -spriteHeight / 2 + HEIGHT / 2
+            drawEndY = spriteHeight / 2 + HEIGHT / 2
+            if drawStartY < 0:
+                offY = abs(drawStartY)
+                drawStartY = 0
+            if drawEndY >= HEIGHT : drawEndY = HEIGHT - 1
+
+            spriteWidth = abs( int(HEIGHT / (transformY)))
+            
+            if spriteHeight > 10000 or spriteWidth > 10000: # FIX FOR OUT OF MEMORY
+                continue            
+            
+            offX = 0
+            drawStartX = -spriteWidth / 2 + spriteScreenX
+            drawEndX = spriteWidth / 2 + spriteScreenX
+            if drawStartX < 0 :
+                offX = abs(drawStartX)
+                drawStartX = 0
+            if drawEndX >= WIDTH : drawEndX = WIDTH - 1
+            
+            if drawStartX >= WIDTH: continue
+            if drawEndX <= 0: continue
+
+            draw_offsets = []
+            i = 0
+            offset_start = -1
+
+            while i < drawEndX - drawStartX:
+                x_indx = int(drawStartX + i)
+                if x_indx > WIDTH:
+                    if offset_start != -1:
+                        draw_offsets.append((offset_start, WIDTH))
+                        offset_start = -1
+                    break
+                if self.z_buffer[x_indx] > transformY:
+                    if offset_start == -1:
+                        offset_start = i
+                else:
+                    if offset_start != -1:
+                        draw_offsets.append((offset_start, i))
+                        offset_start = -1
+                i += 1
+            if offset_start != -1:
+                draw_offsets.append((offset_start, drawEndX - drawStartX))
+            if len(draw_offsets) == 0:
+                continue    # PASSE AU SPRITE SUIVANT
+            
+            ent_surface_scale = pygame.transform.scale(ent.get_texture(), (spriteWidth, spriteHeight))
+
+            
+
+            for debut, fin in draw_offsets:
+                self.add(ent_surface_scale, (drawStartX + debut,drawStartY), pygame.Rect(debut + offX, offY, fin, spriteHeight))
+
 
     def rendu(self):
         for scr_w in range(WIDTH):
@@ -57,7 +140,9 @@ class Render:
 
             if side == 0: wallDist = sideDistX - deltaDistX
             else: wallDist = sideDistY - deltaDistY
-            
+
+            self.z_buffer[scr_w] = wallDist
+
             if wallDist==0: continue
 
             lineHeight = HEIGHT // wallDist
@@ -96,5 +181,5 @@ class Render:
                              (scr_w, lineStart),
                              (scr_w, lineEnd))
 
-    def add(self, surface_to_add):
-        self.game.pygame_screen.blit(surface_to_add, (0,0))
+    def add(self, surface_to_add, dest = (0,0), rect = None):
+        self.game.pygame_screen.blit(surface_to_add, dest, rect)

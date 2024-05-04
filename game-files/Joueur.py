@@ -7,7 +7,6 @@ class Joueur:
         self.y = 0.0
         self.dirX = -1.0
         self.dirY = 0.0
-        self.angle = 0
         self.camPlaneX = 0
         self.camPlaneY = 0.66
 
@@ -61,6 +60,12 @@ class Joueur:
 
     def attack(self):
         pass
+
+    def get_angle_rad(self):
+        return math.atan2(self.dirY, self.dirX)
+
+    def get_angle_deg(self):
+        return math.degrees(math.atan2(self.dirY, self.dirX)) % 360
 
     def update(self):
         if self.stamina<1:

@@ -23,7 +23,11 @@ class HUD:
 
     def rendu(self):
         self.hudSurface.fill(pygame.Color(0,0,0,0))
-        
+
+        self.Lucida_Console.textToSurface(self.hudSurface,
+            f"ANGLE° | {str(self.game.joueur.get_angle_deg())}",
+            0, HEIGHT - 175,
+            pygame.Color(10,255,120))
         self.Lucida_Console.textToSurface(self.hudSurface,
             f"X | {str(self.game.joueur.x)}",
             0, HEIGHT - 150,
@@ -37,6 +41,8 @@ class HUD:
             0, HEIGHT - 100,
             pygame.Color(10,255,120))
         
+
+        #TODO: Barre de vie rendu -> blit sur hudSurface
 
 
         self.menu.rendu()
