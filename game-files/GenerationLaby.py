@@ -1,8 +1,5 @@
+from Object import Caisse
 from random import randint, choice
-
-
-
-
 
 class Pile:
     """Classe Pile"""
@@ -287,20 +284,6 @@ class Labyrinthe:
                 pile.empiler(c)
             if len(liste) > 0:
                 self.__abattre_mur(c[0],c[1],choice(liste),pile)
-#Generation aléatoire des monstres             
-        for i in range (self.hauteur):
-            for j in range(self.longueur):
-                nbMonstres =  [1] * self.nbMonstre
-                for k in range(10):
-                    for l in range(10):
-                        if self.map[i][j][k][l] == 0:        
-                            a = randint(1,2)
-                            if a == 1:
-                                try: 
-                                    nbMonstres.pop()
-                                    self.map[i][j][k][l] = 4
-                                except:
-                                    pass
 #Generation aléatoire des coffres                                
         for i in range (self.hauteur):
             for j in range(self.longueur):
@@ -321,7 +304,25 @@ class Labyrinthe:
                 self.mapFinale.append(ligne)
         
         
+class LabyEnts:
+    def __init__(self, map_array, game):
+        self.game = game
+        self.map = map_array
 
+    def gen_ents(self):
+        num_caisse = 1
+        for i in range(len(self.map)):
+            for j in range(len(self.map[0])):
+                if self.map[i][j] == 3:
+                    self.map[i][j] = 0
+                    self.game.ents.add_entity(Caisse(self, f"Caisse{str(num_caisse)}", 30, (i + 0.5, j + 0.5)))
+                    num_caisse += 1
+                if self.map[i][j] == 4:
+                    self.map[i][j] = 0
+                    # Entité statue sauvgarde
+
+    def get_edited_map(self):
+        return self.map
 
 
 

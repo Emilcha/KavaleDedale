@@ -7,7 +7,7 @@ from Input import InputHandler
 from HUD import HUD
 from Entity import Entity_Handler, Entity
 from Enemies import TrucMechant, FantomeBizare
-from GenerationLaby import Labyrinthe
+from GenerationLaby import Labyrinthe, LabyEnts
 import Maps
 
 class Game:
@@ -30,8 +30,8 @@ class Game:
 
         self.ents = Entity_Handler()
 
-        #for i in range(100):
-        #    self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
+        for i in range(10):
+            self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
 		
         #self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
         #self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
@@ -69,10 +69,21 @@ class Game:
         self.joueur.y = playerPos[1]
 
     def nouveauLaby(self):
+        self.ents.vider()
+
         laby = Labyrinthe(4,4)
         laby.genereLaby()
-        self.changerMap(laby.getMap(),(1,1))
+
+        genEntite = LabyEnts(laby.getMap(), self)
         del laby
+
+        genEntite.gen_ents()
+
+        self.changerMap(genEntite.get_edited_map(),(1,1))
+
+        del genEntite
+        
+
 
 
 JeuLabyrinthe = Game(Maps.rooms, (6,6))

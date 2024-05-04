@@ -61,6 +61,9 @@ class Entity_Handler:
             if self.entitys[ent_index].name == name:
                 self.entitys.pop(ent_index)
 
+    def vider(self):
+        self.entitys = []
+
     def index_sorted_dist(self, joueur):
         dist = {}
         for ent_index in range(len(self.entitys)):
