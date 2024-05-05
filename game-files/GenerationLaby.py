@@ -1,5 +1,6 @@
 from Object import Caisse
 from random import randint, choice
+import copy
 
 class Pile:
     """Classe Pile"""
@@ -46,6 +47,7 @@ class Labyrinthe:
         self.nbSalle = longueur + hauteur
         self.nbMonstre = int(longueur / hauteur)
         
+        self.CaseDepart = None
         
         self.laby = []
         for i in range(hauteur):
@@ -54,6 +56,12 @@ class Labyrinthe:
         self.map = []
         for i in range(hauteur):
             self.map.append([2 for i in range(self.longueur)])
+        
+       
+        self.Minimap = []
+        for i in range(self.hauteur):
+            self.Minimap.append([0 for i in range(self.longueur)])
+            
        
         
         self.mapFinale= []
@@ -174,6 +182,17 @@ class Labyrinthe:
                          [1,2,2,2,0,0,2,2,2,1],
                          [1,1,1,1,1,1,1,1,1,1]]
 
+        self.Spawn= [[1,1,1,1,1,1,1,1,1,1],
+                     [1,0,0,0,0,0,0,0,0,1],
+                     [1,0,2,0,0,0,0,2,0,1],
+                     [1,0,0,2,0,0,2,0,0,1],
+                     [1,0,0,0,0,0,0,0,0,1],
+                     [1,0,0,0,0,0,0,0,0,1],
+                     [1,0,0,2,0,0,2,0,0,1],
+                     [1,0,2,0,0,0,0,2,0,1],
+                     [1,0,0,0,0,0,0,0,0,1],
+                     [1,1,1,1,1,1,1,1,1,1]]
+
         self.listeCouloir = [self.Couloir1,self.Couloir2]
         self.listeSalle = [self.Salle1,self.Salle2,self.Salle3,self.Salle4,self.Salle5,self.Salle6,self.Sauvegarde1,self.Sauvegarde2]
         
@@ -186,58 +205,92 @@ class Labyrinthe:
     def afficheLaby(self):
         return self.laby
     
-    def getMap(self):
+    def afficheMap(self):
+        return self.map
+    
+    def afficheMapFinale(self):
         return self.mapFinale
+    
+    def afficheMinimap(self):
+        return self.Minimap
 
+    def getCaseDepart(self):
+        return self.CaseDepart
+
+
+    def genereMinimap(self):
+        for i in range(self.hauteur):
+            for j in range(self.longueur):
+                listeDir = []
+                num = 0
+                if self.map[i][j][0][4] != 1:
+                    listeDir.append('N')
+                if self.map[i][j][9][4] != 1:
+                    listeDir.append('S')
+                if self.map[i][j][4][0] != 1:
+                    listeDir.append('W')
+                if self.map[i][j][4][9] != 1:    
+                    listeDir.append('E')
+                
+                if 'N' in listeDir:
+                    num += 1000
+                if 'S' in listeDir:
+                    num += 100
+                if 'W' in listeDir:
+                    num += 10
+                if 'E' in listeDir:
+                    num += 1
+                self.Minimap[i][j] = self.Minimap[i][j] + str(num)
+            
 
     def __directions_possibles(self,i,j):
         directions = []
-        if j < self.hauteur -1:
-            if not self.laby[i][j+1] == 4 :
+        if i < self.hauteur -1 :
+            if not self.laby[i+1][j] == 'Vue' :
                 directions.append('S')
-        if j-1 >=0 :
-            if self.laby[i][j-1] != 4:
+        if i >0 :
+            if not self.laby[i-1][j] == 'Vue':
                 directions.append('N')
-        if i < self.longueur - 1:
-            if not self.laby[i+1][j] == 4:
+        if j < self.longueur -1:
+            if not self.laby[i][j+1] == 'Vue':
                 directions.append('E')
-        if i -1 >= 0 :
-            if self.laby[i-1][j] != 4:    
+        if j > 0 :
+            if not self.laby[i][j-1] == 'Vue':    
                 directions.append('W')
         return directions            
 
 
 
     def __abattre_mur(self,i,j,dire,pile):
-
-        if dire == 'S':
-            self.map[i][j][9][4] = 0 
-            self.map[i][j][9][5] = 0 
-            self.map[i][j+1][0][4] = 0
-            self.map[i][j+1][0][5] = 0
-            self.laby[i][j+1] = 4
-            pile.empiler((i, j+1))
-        if dire == 'N': 
-            self.map[i][j][0][4] = 0
-            self.map[i][j][0][5] = 0
-            self.map[i][j-1][9][4] = 0 
-            self.map[i][j-1][9][5] = 0 
-            self.laby[i][j-1] = 4
-            pile.empiler((i, j-1))
-        if dire == 'W':
-            self.map[i][j][4][0] = 0
-            self.map[i][j][5][0] = 0
-            self.map[i-1][j][4][9] = 0
-            self.map[i-1][j][5][9] = 0
-            self.laby[i-1][j] = 4
-            pile.empiler((i-1, j))
-        if dire == 'E':
-            self.map[i][j][4][9] = 0
-            self.map[i][j][5][9] = 0
-            self.map[i+1][j][4][0] = 0
-            self.map[i+1][j][5][0] = 0
-            self.laby[i+1][j] = 4
-            pile.empiler((i+1, j))
+        for elem in dire:
+            if elem == 'S' and not self.laby[i+1][j] == 'Vue':
+                self.map[i][j][9][4] = 0
+                self.map[i][j][9][5] = 0
+                self.map[i+1][j][0][4] = 0
+                self.map[i+1][j][0][5] = 0
+                self.laby[i+1][j] = 'Vue'
+                pile.empiler((i+1, j))
+            if elem == 'N' and not self.laby[i-1][j] == 'Vue': 
+                self.map[i][j][0][4] = 0
+                self.map[i][j][0][5] = 0
+                self.map[i-1][j][9][4] = 0
+                self.map[i-1][j][9][5] = 0
+                self.laby[i-1][j] = 'Vue'
+                pile.empiler((i-1,j))
+            if elem == 'W' and not self.laby[i][j-1] == 'Vue':
+                self.map[i][j][4][0] = 0
+                self.map[i][j][5][0] = 0
+                self.map[i][j-1][4][9] = 0
+                self.map[i][j-1][5][9] = 0
+                self.laby[i][j-1] = 'Vue'
+                pile.empiler((i, j-1))
+            if elem == 'E' and not self.laby[i][j+1] == 'Vue':
+                self.map[i][j][4][9] = 0
+                self.map[i][j][5][9] = 0
+                self.map[i][j+1][4][0] = 0
+                self.map[i][j+1][5][0] = 0
+                self.laby[i][j+1] = 'Vue'
+                pile.empiler((i, j+1))
 
 
 
@@ -246,7 +299,8 @@ class Labyrinthe:
         pile = Pile()
         
         typeCase = [1] * self.nbSalle
-        CaseDepart = (randint(0,self.longueur - 1 ),randint(0,self.hauteur - 1))
+        CaseDepart = (randint(0,self.hauteur - 1),randint(0,self.longueur - 1))
+        self.CaseDepart = CaseDepart
         pile.empiler(CaseDepart)
 
 #Generation des emplacements des salles et des couloirs     
@@ -265,25 +319,71 @@ class Labyrinthe:
 #Generation des types de salle et de couloir
         for i in range(self.hauteur):
             for j in range(self.longueur):
+                if (i,j) == CaseDepart:
+                        self.map[i][j] = copy.deepcopy(self.Spawn)
+                        continue
                 if self.map[i][j] == 2:
-                    self.map[i][j] = choice(self.listeCouloir)
+                    a = choice(self.listeCouloir)
+                    self.map[i][j] = copy.deepcopy(a)
                 if self.map[i][j] == 3:
-                    self.map[i][j] = choice(self.listeSalle)
+                    a = choice(self.listeSalle)
+                    self.map[i][j] = copy.deepcopy(a)
                     if self.map[i][j] == self.Sauvegarde1 or self.map[i][j] == self.Sauvegarde2:
                         self.listeSalle.remove(self.Sauvegarde1)
                         self.listeSalle.remove(self.Sauvegarde2)                
+ 
         
-        
-        
+#Debut generation minimap 
+        for i in range(self.hauteur):
+            for j in range(self.longueur):
+                if self.map[i][j] == self.listeCouloir[0]:
+                    self.Minimap[i][j] = 'C0'
+                if self.map[i][j] == self.listeCouloir[1]:
+                    self.Minimap[i][j] = 'C1'
+                if self.map[i][j] == self.listeSalle[0]:
+                    self.Minimap[i][j] = 'S0'
+                if self.map[i][j] == self.listeSalle[1]:
+                    self.Minimap[i][j] = 'S1'
+                if self.map[i][j] == self.listeSalle[2]:
+                    self.Minimap[i][j] = 'S2'
+                if self.map[i][j] == self.listeSalle[3]:
+                    self.Minimap[i][j] = 'S3'
+                if self.map[i][j] == self.listeSalle[4]:
+                    self.Minimap[i][j] = 'S4'
+                if self.map[i][j] == self.listeSalle[5]:
+                    self.Minimap[i][j] = 'S5'
+                if self.map[i][j] == self.Sauvegarde1:
+                    self.Minimap[i][j] = 'SAV0'
+                if self.map[i][j] == self.Sauvegarde2:                
+                    self.Minimap[i][j] = 'SAV1'
+                if self.map[i][j] == self.Spawn:
+                    self.Minimap[i][j] = 'SPWN'
+
+
 #Generation des ouvertures , des passages du labyrinthe        
-        self.laby[CaseDepart[0]][CaseDepart[1]] = 4
+        self.laby[CaseDepart[0]][CaseDepart[1]] = 'Vue'
         while not pile.est_vide():
             c = pile.depiler()
+            #print(c)
             liste = self.__directions_possibles(c[0],c[1])
             if len(liste) > 1:
                 pile.empiler(c)
             if len(liste) > 0:
-                self.__abattre_mur(c[0],c[1],choice(liste),pile)
+                direction = choice(liste)
+                if len(direction) > 2 :
+                    direction.pop(randint(0,len(direction)))
+                    #print(direction)
+                self.__abattre_mur(c[0],c[1],direction,pile)
+        
+        
+        
+        for i in range(self.hauteur):  
+            for k in range(10):
+                self.map[0][i][0][k] = 1
+                self.map[4][i][9][k] = 1
+                self.map[i][0][k][0] = 1
+                self.map[i][4][k][9] = 1
+                
 #Generation aléatoire des coffres                                
         for i in range (self.hauteur):
             for j in range(self.longueur):

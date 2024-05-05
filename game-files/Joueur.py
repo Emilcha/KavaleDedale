@@ -1,4 +1,5 @@
 from Global import *
+from Armes import Arme
 
 class Joueur:
     def __init__(self, game):
@@ -14,12 +15,19 @@ class Joueur:
         self.stamina = 1
         self.noclip = False
 
+        self.isMoving = False
+        self.isRunning = False
+        #                                                  positionement vertical : HEIGHT-Hauteur fichier*scale+corection bobbing  
+        self.arme = Arme(self.game, "main", "game-files/img/wep/main.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7)
+
     def getSpeed(self):
         if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
+            self.isRunning = True
             self.stamina -= 0.01
             if self.stamina<=0:
                 self.canRun = False
             return self.game.settings["move_speed_sprinting"]
+        self.isRunning = False
         return self.game.settings["move_speed"]
 
     def goForward(self):
@@ -74,14 +82,17 @@ class Joueur:
             self.stamina = 1
             self.canRun = True
 
-
+        self.isMoving = False
         if self.game.input.isPressed(self.game.settings["key_forward"]):
             self.goForward()
+            self.isMoving = True
         if self.game.input.isPressed(self.game.settings["key_backward"]):
             self.goBackward()
+            self.isMoving = True
         if self.game.input.isPressed(self.game.settings["key_right"]):
             self.lookRight()
         if self.game.input.isPressed(self.game.settings["key_left"]):
             self.lookLeft()
+
         if self.game.input.isPressed(self.game.settings["key_attack"]):
             self.attack()

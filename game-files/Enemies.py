@@ -3,7 +3,7 @@ from Entity import Entity
 
 class TrucMechant(Entity):
     def __init__(self, game, name, hp, pos):
-        super().__init__(game, name, hp, pos, "game-files/img/Momie1.png")
+        super().__init__(game, name, hp, pos, "game-files/img/ents/Momie1.png")
         self.dx = 0
         self.dy = 0
         self.next_random_move = random.randint(2,10)
@@ -32,8 +32,8 @@ class FantomeBizare(Entity):
         super().__init__(game, name, hp, pos, None)
         self.texture_index = 0
         self.texture = [
-            pygame.image.load("game-files/img/fantome.png"),
-            pygame.image.load("game-files/img/fantome_gentil_un_peu.png")
+            pygame.image.load("game-files/img/ents/fantome.png"),
+            pygame.image.load("game-files/img/ents/fantome_gentil_un_peu.png")
         ]
 
     def get_texture(self):

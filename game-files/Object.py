@@ -3,7 +3,7 @@ from Entity import Entity
 
 class Caisse(Entity):
     def __init__(self, game, name, hp, pos):
-        super().__init__(game, name, hp, pos, "game-files/img/caisse_osekour.png")
+        super().__init__(game, name, hp, pos, "game-files/img/ents/caisse_osekour.png")
 
     def kill(self):
         super().kill()

@@ -2,12 +2,15 @@ from Global import *
 from HUDUtils import FontManager
 from Menus import MenuESC
 
+
 class HUD:
     def __init__(self, game):
         self.game = game
         self.hudSurface = pygame.Surface((WIDTH, HEIGHT), flags=pygame.SRCALPHA)
 
         self.menu = MenuESC(game, self.hudSurface)
+
+        self.minimap = None
 
         self.game.input.setKDownCallback(pygame.K_ESCAPE, self.toucheMenu)
 
@@ -23,6 +26,9 @@ class HUD:
 
     def rendu(self):
         self.hudSurface.fill(pygame.Color(0,0,0,0))
+
+        if self.minimap != None:
+            self.hudSurface.blit(self.minimap.draw(), (10,10))
 
         self.Lucida_Console.textToSurface(self.hudSurface,
             f"ANGLE° | {str(self.game.joueur.get_angle_deg())}",

@@ -8,6 +8,7 @@ from HUD import HUD
 from Entity import Entity_Handler, Entity
 from Enemies import TrucMechant, FantomeBizare
 from GenerationLaby import Labyrinthe, LabyEnts
+from Minimap import Minimap
 import Maps
 
 class Game:
@@ -61,6 +62,7 @@ class Game:
     def rendu(self):
         self.renderer.rendu()
         self.renderer.rendu_entite()
+        self.renderer.rendu_armes()
         self.renderer.add(self.hud.rendu())
 
     def changerMap(self, new_map, playerPos):
@@ -69,23 +71,27 @@ class Game:
         self.joueur.y = playerPos[1]
 
     def nouveauLaby(self):
+        
         self.ents.vider()
-
-        laby = Labyrinthe(4,4)
+        laby = Labyrinthe(5,5)
         laby.genereLaby()
+        
+        genEntite = LabyEnts(laby.afficheMapFinale(), self)
 
-        genEntite = LabyEnts(laby.getMap(), self)
-        del laby
+        if self.hud.minimap != None:
+            del self.hud.minimap
+        self.hud.minimap = Minimap(self, laby.afficheMapFinale(), laby.afficheMinimap(), 4)
 
         genEntite.gen_ents()
-
-        self.changerMap(genEntite.get_edited_map(),(1,1))
-
+        case_depart = laby.getCaseDepart()
+        case_depart = (case_depart[1]*10+5.5, case_depart[0]*10+5.5)
+        self.changerMap(genEntite.get_edited_map(),case_depart)
+        del laby
         del genEntite
         
 
 
 
-JeuLabyrinthe = Game(Maps.rooms, (6,6))
+JeuLabyrinthe = Game(Maps.playground, (6,6))
 JeuLabyrinthe.gameLoop()
 del JeuLabyrinthe

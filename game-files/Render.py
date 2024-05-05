@@ -4,6 +4,7 @@ class Render:
     def __init__(self, game):
         self.game = game
         self.z_buffer = [None for i in range(WIDTH)]
+        self.weapon_bobbing_i = 0
 
     def rendu_entite(self):
         sorted_ent = self.game.ents.index_sorted_dist(self.game.joueur)
@@ -85,6 +86,23 @@ class Render:
 
             for debut, fin in draw_offsets:
                 self.add(ent_surface_scale, (drawStartX + debut,drawStartY), pygame.Rect(debut + offX, offY, fin, spriteHeight))
+
+
+    def rendu_armes(self):
+        arme = self.game.joueur.arme
+        texture = arme.texture
+        position = arme.screen_pos
+
+        if self.game.joueur.isMoving:
+            position = (position[0], position[1] + int(math.sin(self.weapon_bobbing_i)*10))
+            if self.game.joueur.isRunning:
+                self.weapon_bobbing_i += math.pi / 10
+            else:
+                self.weapon_bobbing_i += math.pi / 20
+        else:
+            self.weapon_bobbing_i = 0
+
+        self.add(texture, position)
 
 
     def rendu(self):
