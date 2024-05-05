@@ -50,8 +50,8 @@ class Minimap:
         pygame.draw.rect(surface,
                     pygame.Color(255,255,0),
                     (
-                        joueur_salle_x * 10 * block_width, joueur_salle_y * 10 * block_height,
-                        10 * block_width, 10 * block_height
+                        joueur_salle_x * 10 * block_width - 1, joueur_salle_y * 10 * block_height - 1,
+                        10 * block_width + 1, 10 * block_height + 1
                     ),
                     width = 1)
 

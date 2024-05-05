@@ -17,8 +17,6 @@ class Entity:
 
         self.tick_count = 0
         self.alive = True
-        
-        self.direction = 0
 
     def get_texture(self):
         return self.texture

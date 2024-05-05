@@ -11,13 +11,16 @@ class Joueur:
         self.camPlaneX = 0
         self.camPlaneY = 0.66
 
-        self.canRun = True
+        self.vie = 100
+
         self.stamina = 1
+        self.canRun = True
+        
         self.noclip = False
 
         self.isMoving = False
         self.isRunning = False
-        #                                                  positionement vertical : HEIGHT-Hauteur fichier*scale+corection bobbing  
+        #positionement vertical : HEIGHT-Hauteur fichier*scale+corection bobbing  
         self.arme = Arme(self.game, "main", "game-files/img/wep/main.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7)
 
     def getSpeed(self):

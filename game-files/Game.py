@@ -84,8 +84,7 @@ class Game:
 
         genEntite.gen_ents()
         case_depart = laby.getCaseDepart()
-        case_depart = (case_depart[1]*10+5.5, case_depart[0]*10+5.5)
-        self.changerMap(genEntite.get_edited_map(),case_depart)
+        self.changerMap(genEntite.get_edited_map(),(case_depart[0]*10+5.5,case_depart[1]*10+5.5))
         del laby
         del genEntite
         
