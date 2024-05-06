@@ -31,10 +31,10 @@ class Game:
 
         self.ents = Entity_Handler()
 
-        for i in range(10):
-            self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
+        #for i in range(10):
+        #    self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
 		
-        #self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
+        self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
         #self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
         self.running = True
         self.isPlaying = True

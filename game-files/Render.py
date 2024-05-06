@@ -12,6 +12,7 @@ class Render:
 
         for paire in sorted_ent:
             ent = self.game.ents.get_entity(paire[0])
+            ent.drawn = False
             dist = paire[1] # Distance au joueur
             if dist < 0.07: continue
 
@@ -82,7 +83,7 @@ class Render:
             
             ent_surface_scale = pygame.transform.scale(ent.get_texture(), (spriteWidth, spriteHeight))
 
-            
+            ent.drawn = True
 
             for debut, fin in draw_offsets:
                 self.add(ent_surface_scale, (drawStartX + debut,drawStartY), pygame.Rect(debut + offX, offY, fin, spriteHeight))

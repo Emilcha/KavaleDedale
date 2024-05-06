@@ -70,7 +70,7 @@ class Joueur:
         self.camPlaneY = oldPlaneX * math.sin(-self.game.settings["rotate_speed"]) + self.camPlaneY * math.cos(-self.game.settings["rotate_speed"])
 
     def attack(self):
-        pass
+        self.arme.attack()
 
     def get_angle_rad(self):
         return math.atan2(self.dirY, self.dirX)

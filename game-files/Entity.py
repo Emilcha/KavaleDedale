@@ -15,6 +15,7 @@ class Entity:
         self.health = hp
         self.content = []
 
+        self.drawn = False
         self.tick_count = 0
         self.alive = True
 
@@ -30,11 +31,15 @@ class Entity:
     def move(self):
         pass
 
+    def attack(self):
+        pass
+
     def update(self):
         self.tick_count += 1
-        if self.health == 0:
+        if self.health <= 0:
             self.kill()
         else:
+            self.attack()
             self.move()
 
 

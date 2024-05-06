@@ -48,13 +48,21 @@ class FantomeBizare(Entity):
         vec_y /= vec_len
         # Angle entre joueur et fanthomme
         ent_player_angle = math.degrees(math.atan2(vec_y, vec_x) - self.game.joueur.get_angle_rad()) % 360
+        print(ent_player_angle)
         # Test deplacements
-        if (ent_player_angle>15) and (ent_player_angle<360-15):
+        if (ent_player_angle>15 and ent_player_angle<360-15):
             dx = self.game.joueur.x - self.x
             dy = self.game.joueur.y - self.y
-            if math.sqrt(dx**2 + dy**2) > 0.3:
-                self.x += dx / 100
-                self.y += dy / 100
+            self.x += dx / 100
+            self.y += dy / 100
             self.texture_index = 0
         else:
             self.texture_index = 1
+
+    def attack(self):
+        dx = self.game.joueur.x - self.x
+        dy = self.game.joueur.y - self.y
+        if math.sqrt(dx**2 + dy**2) < 0.4:
+            self.game.joueur.vie -= 10
+            self.game.ents.del_entity(self.name)
+        
