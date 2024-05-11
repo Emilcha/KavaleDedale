@@ -1,4 +1,5 @@
 from Global import *
+from Armes import Arme
 
 class Joueur:
     def __init__(self, game):
@@ -7,20 +8,29 @@ class Joueur:
         self.y = 0.0
         self.dirX = -1.0
         self.dirY = 0.0
-        self.angle = 0
         self.camPlaneX = 0
         self.camPlaneY = 0.66
 
-        self.canRun = True
+        self.vie = 100
+
         self.stamina = 1
+        self.canRun = True
+        
         self.noclip = False
+
+        self.isMoving = False
+        self.isRunning = False
+        #positionement vertical : HEIGHT-Hauteur fichier*scale+corection bobbing  
+        self.arme = Arme(self.game, "main", "game-files/img/wep/main.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7)
 
     def getSpeed(self):
         if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
+            self.isRunning = True
             self.stamina -= 0.01
             if self.stamina<=0:
                 self.canRun = False
             return self.game.settings["move_speed_sprinting"]
+        self.isRunning = False
         return self.game.settings["move_speed"]
 
     def goForward(self):
@@ -60,7 +70,13 @@ class Joueur:
         self.camPlaneY = oldPlaneX * math.sin(-self.game.settings["rotate_speed"]) + self.camPlaneY * math.cos(-self.game.settings["rotate_speed"])
 
     def attack(self):
-        pass
+        self.arme.attack()
+
+    def get_angle_rad(self):
+        return math.atan2(self.dirY, self.dirX)
+
+    def get_angle_deg(self):
+        return math.degrees(math.atan2(self.dirY, self.dirX)) % 360
 
     def update(self):
         if self.stamina<1:
@@ -69,14 +85,17 @@ class Joueur:
             self.stamina = 1
             self.canRun = True
 
-
+        self.isMoving = False
         if self.game.input.isPressed(self.game.settings["key_forward"]):
             self.goForward()
+            self.isMoving = True
         if self.game.input.isPressed(self.game.settings["key_backward"]):
             self.goBackward()
+            self.isMoving = True
         if self.game.input.isPressed(self.game.settings["key_right"]):
             self.lookRight()
         if self.game.input.isPressed(self.game.settings["key_left"]):
             self.lookLeft()
+
         if self.game.input.isPressed(self.game.settings["key_attack"]):
             self.attack()

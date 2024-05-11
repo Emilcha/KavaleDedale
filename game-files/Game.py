@@ -5,6 +5,10 @@ from Joueur import Joueur
 from Settings import Settings
 from Input import InputHandler
 from HUD import HUD
+from Entity import Entity_Handler, Entity
+from Enemies import TrucMechant, FantomeBizare
+from GenerationLaby import Labyrinthe, LabyEnts
+from Minimap import Minimap
 import Maps
 
 class Game:
@@ -19,11 +23,19 @@ class Game:
         self.input = InputHandler(self)
         self.carte = map_array
         self.renderer = Render(self)
+
         self.joueur = Joueur(self)
         self.hud = HUD(self)
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
 
+        self.ents = Entity_Handler()
+
+        #for i in range(10):
+        #    self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
+		
+        self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
+        #self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
         self.running = True
         self.isPlaying = True
 
@@ -40,13 +52,17 @@ class Game:
             pygame.display.update()
 
     def events(self):
+        pygame.display.set_caption(f"{self.pygame_clock.get_fps() : .1f}")
         self.input.pollEvents()
 
         if self.isPlaying:          # Si aucun menu ouvert
             self.joueur.update()
+            self.ents.update_ents()
 
     def rendu(self):
         self.renderer.rendu()
+        self.renderer.rendu_entite()
+        self.renderer.rendu_armes()
         self.renderer.add(self.hud.rendu())
 
     def changerMap(self, new_map, playerPos):
@@ -54,6 +70,27 @@ class Game:
         self.joueur.x = playerPos[0]
         self.joueur.y = playerPos[1]
 
-JeuLabyrinthe = Game(Maps.example,(6,6))
+    def nouveauLaby(self):
+        
+        self.ents.vider()
+        laby = Labyrinthe(5,5)
+        laby.genereLaby()
+        
+        genEntite = LabyEnts(laby.afficheMapFinale(), self)
+
+        if self.hud.minimap != None:
+            del self.hud.minimap
+        self.hud.minimap = Minimap(self, laby.afficheMapFinale(), laby.afficheMinimap(), 4)
+
+        genEntite.gen_ents()
+        case_depart = laby.getCaseDepart()
+        self.changerMap(genEntite.get_edited_map(),(case_depart[0]*10+5.5,case_depart[1]*10+5.5))
+        del laby
+        del genEntite
+        
+
+
+
+JeuLabyrinthe = Game(Maps.playground, (6,6))
 JeuLabyrinthe.gameLoop()
 del JeuLabyrinthe
