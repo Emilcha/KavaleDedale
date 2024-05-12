@@ -23,7 +23,7 @@ class Entity:
         return self.texture
 
     def kill(self):
-        self.alive = False
+        self.game.ents.del_entity(self.name)
 
     def attack(self):
         pass
@@ -63,6 +63,7 @@ class Entity_Handler:
         for ent_index in range(len(self.entitys)):
             if self.entitys[ent_index].name == name:
                 self.entitys.pop(ent_index)
+                return
 
     def vider(self):
         self.entitys = []

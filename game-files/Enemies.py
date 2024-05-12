@@ -32,8 +32,8 @@ class FantomeBizare(Entity):
         super().__init__(game, name, hp, pos, None)
         self.texture_index = 0
         self.texture = [
-            pygame.image.load("game-files/img/ents/fantome.png"),
-            pygame.image.load("game-files/img/ents/fantome_gentil_un_peu.png")
+            pygame.image.load("game-files/img/ents/FantomeAggro.png"),
+            pygame.image.load("game-files/img/ents/FantomePassif.png")
         ]
 
     def get_texture(self):
@@ -44,13 +44,15 @@ class FantomeBizare(Entity):
         vec_x = self.x - self.game.joueur.x
         # Normaliser le vecteur
         vec_len = math.sqrt(vec_x**2 + vec_y**2)
+        if vec_len>= 6:
+            self.texture_index = 1
+            return
         vec_x /= vec_len
         vec_y /= vec_len
         # Angle entre joueur et fanthomme
         ent_player_angle = math.degrees(math.atan2(vec_y, vec_x) - self.game.joueur.get_angle_rad()) % 360
-        print(ent_player_angle)
         # Test deplacements
-        if (ent_player_angle>15 and ent_player_angle<360-15):
+        if (ent_player_angle>10 and ent_player_angle<360-10):
             dx = self.game.joueur.x - self.x
             dy = self.game.joueur.y - self.y
             self.x += dx / 100

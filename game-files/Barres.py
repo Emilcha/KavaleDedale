@@ -40,7 +40,6 @@ class barre_de_vie:
 
     def update(self):
         self.point_vie = self.game.joueur.vie
-
         if self.point_vie<=50:
             self.couleur_barre = (255,int((self.point_vie/50)*255),0)
         else:
@@ -57,6 +56,7 @@ class barre_de_vie:
                 self.couleur = (205,0,0)
             if (pygame.time.get_ticks()-self.flash)>300:
                 self.flash = pygame.time.get_ticks()"""
-        pygame.draw.rect(window,(0, 0, 0),self.bord_barre,1)
-        pygame.draw.rect(window,self.couleur_barre,self.zone_barre)
+        if self.point_vie >= 0:
+            pygame.draw.rect(window,(0, 0, 0),self.bord_barre,1)
+            pygame.draw.rect(window,self.couleur_barre,self.zone_barre)
 

@@ -7,6 +7,7 @@ from Input import InputHandler
 from HUD import HUD
 from Entity import Entity_Handler, Entity
 from Enemies import TrucMechant, FantomeBizare
+from Object import Sortie
 from GenerationLaby import Labyrinthe, LabyEnts
 from Minimap import Minimap
 import Maps
@@ -31,10 +32,11 @@ class Game:
 
         self.ents = Entity_Handler()
 
-        #for i in range(10):
-        #    self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (4, 5)))
+        for i in range(10):
+            self.ents.add_entity(TrucMechant(self, f"pasgentil{i}", 100, (9, 9)))
 		
         self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (4, 5)))
+        self.ents.add_entity(FantomeBizare(self, "fanthome", 20, (7, 2)))
         #self.ents.add_entity(TrucMechant(self, "pasgentil", 100, (4, 5)))
         self.running = True
         self.isPlaying = True
@@ -85,6 +87,15 @@ class Game:
         genEntite.gen_ents()
         case_depart = laby.getCaseDepart()
         self.changerMap(genEntite.get_edited_map(),(case_depart[0]*10+5.5,case_depart[1]*10+5.5))
+
+        case_fin = laby.getCaseFin()
+        case_fin_type_salle = laby.afficheMinimap()[case_fin[0]][case_fin[1]]
+        while case_fin_type_salle not in ["S1","S3","S4","C0","C1"]:
+            case_fin = laby.getCaseFin()
+            case_fin_type_salle = laby.afficheMinimap()[case_fin[0]][case_fin[1]]
+
+        self.ents.add_entity(Sortie(self, (case_fin[0]*10+5,case_fin[1]*10+5)))
+
         del laby
         del genEntite
         

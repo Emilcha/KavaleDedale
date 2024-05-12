@@ -1,5 +1,5 @@
 from Global import *
-from Armes import Arme
+from Armes import Arme, Inventaire
 
 class Joueur:
     def __init__(self, game):
@@ -21,7 +21,9 @@ class Joueur:
         self.isMoving = False
         self.isRunning = False
         #positionement vertical : HEIGHT-Hauteur fichier*scale+corection bobbing  
-        self.arme = Arme(self.game, "main", "game-files/img/wep/main.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7)
+        self.arme = Arme(self.game, "Poing", "game-files/img/wep/poing.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7, 10, 1, 10, 10)
+        self.frames_since_last_attack = 0
+        self.inv = Inventaire()
 
     def getSpeed(self):
         if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
@@ -70,7 +72,9 @@ class Joueur:
         self.camPlaneY = oldPlaneX * math.sin(-self.game.settings["rotate_speed"]) + self.camPlaneY * math.cos(-self.game.settings["rotate_speed"])
 
     def attack(self):
-        self.arme.attack()
+        if self.frames_since_last_attack > self.arme.cooldown:
+            self.arme.attack()
+            self.frames_since_last_attack = 0
 
     def get_angle_rad(self):
         return math.atan2(self.dirY, self.dirX)
@@ -84,6 +88,8 @@ class Joueur:
         else:
             self.stamina = 1
             self.canRun = True
+            
+        self.frames_since_last_attack += 1
 
         self.isMoving = False
         if self.game.input.isPressed(self.game.settings["key_forward"]):
@@ -96,6 +102,21 @@ class Joueur:
             self.lookRight()
         if self.game.input.isPressed(self.game.settings["key_left"]):
             self.lookLeft()
+
+        if self.game.input.isPressed(self.game.settings["key_poing"]):
+            self.arme = Arme(self.game, "Poing", "game-files/img/wep/poing.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7, 20, 1, 10, 20)
+
+        if self.game.input.isPressed(self.game.settings["key_epee"]):
+            if self.inv.a_object('Spartan'):
+                self.arme = Arme(self.game, "Epee", "game-files/img/wep/epee.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7, 25, 2, 15, 30)
+
+        if self.game.input.isPressed(self.game.settings["key_zeus"]):
+            if self.inv.a_object('Zeus'):
+                self.arme = Arme(self.game, "Zeus", "game-files/img/wep/zeus.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7, 10, 5, 15, 45)
+
+        if self.game.input.isPressed(self.game.settings["key_poseidon"]):
+            if self.inv.a_object('Poseidon'):
+                self.arme = Arme(self.game, "Poseidon", "game-files/img/wep/trident.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7, 15, 2.5, 20, 60)
 
         if self.game.input.isPressed(self.game.settings["key_attack"]):
             self.attack()

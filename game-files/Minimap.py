@@ -51,7 +51,7 @@ class Minimap:
                     pygame.Color(255,255,0),
                     (
                         joueur_salle_x * 10 * block_width - 1, joueur_salle_y * 10 * block_height - 1,
-                        10 * block_width + 1, 10 * block_height + 1
+                        10 * block_width + 2, 10 * block_height + 2
                     ),
                     width = 1)
 

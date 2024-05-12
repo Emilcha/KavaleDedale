@@ -27,3 +27,12 @@ class Settings:
         self.settings["key_left"]       = pygame.K_q
         self.settings["key_sprint"]     = pygame.K_LSHIFT
         self.settings["key_attack"]     = pygame.K_SPACE
+
+        self.settings["key_poing"]      = pygame.K_1
+        self.settings["key_epee"]       = pygame.K_2
+        self.settings["key_zeus"]       = pygame.K_3
+        self.settings["key_poseidon"]   = pygame.K_4
+
+        self.settings["key_pot_vie"]    = pygame.K_5
+        self.settings["key_pot_stam"]   = pygame.K_6
+        self.settings["key_pot_degat"]  = pygame.K_7

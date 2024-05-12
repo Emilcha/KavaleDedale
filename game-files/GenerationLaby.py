@@ -1,5 +1,6 @@
 from Object import Caisse
 from random import randint, choice
+import math
 import copy
 
 class Pile:
@@ -37,7 +38,31 @@ class Pile:
             print("Pile vide !")
 
 
+class Arbre:
+    solution = None
+    profondeur = 0
 
+    def __init__(self, val, sa=[]):
+        self.valeur = val
+        self.sa = sa
+
+    def ajout_sa(self,arbre):
+        self.sa.append(arbre)
+
+    def chemin_plus_profond(self):
+        Arbre.solution = None
+        Arbre.profondeur = 0
+        Arbre.__chemin_profond(self,0)
+        return (Arbre.solution, Arbre.profondeur)
+
+    def __chemin_profond(self, profondeur_courante):
+        if len(self.sa) == 0:
+            if profondeur_courante >= Arbre.profondeur:
+                Arbre.profondeur = profondeur_courante
+                Arbre.solution = self.valeur
+        else:
+            for ab in self.sa:
+                Arbre.__chemin_profond(ab, profondeur_courante + 1)
 
 class Labyrinthe:
     def __init__(self,longueur,hauteur):
@@ -48,6 +73,7 @@ class Labyrinthe:
         self.nbMonstre = int(longueur / hauteur)
         
         self.CaseDepart = None
+        self.CaseFinale = None
         
         self.laby = []
         for i in range(hauteur):
@@ -218,11 +244,19 @@ class Labyrinthe:
         return self.CaseDepart
 
 
-    def genereMinimap(self):
+    def getCaseFin(self):
+        # TEMPORAIRE:
+        self.CaseFinale = (randint(0,self.hauteur - 1),randint(0,self.longueur - 1))
+        while math.sqrt((self.CaseFinale[0]-self.CaseDepart[0])**2+(self.CaseFinale[1]-self.CaseDepart[1])**2) < 3:
+            self.CaseFinale = (randint(0,self.hauteur - 1),randint(0,self.longueur - 1))
+        return self.CaseFinale
+
+
+
+        minmap_arbre = [[None for j in range(self.longueur)] for i in range(self.hauteur)]
         for i in range(self.hauteur):
             for j in range(self.longueur):
                 listeDir = []
-                num = 0
                 if self.map[i][j][0][4] != 1:
                     listeDir.append('N')
                 if self.map[i][j][9][4] != 1:
@@ -231,16 +265,20 @@ class Labyrinthe:
                     listeDir.append('W')
                 if self.map[i][j][4][9] != 1:    
                     listeDir.append('E')
-                
-                if 'N' in listeDir:
-                    num += 1000
-                if 'S' in listeDir:
-                    num += 100
-                if 'W' in listeDir:
-                    num += 10
-                if 'E' in listeDir:
-                    num += 1
-                self.Minimap[i][j] = self.Minimap[i][j] + str(num)
+
+                minmap_arbre[i][j] = listeDir
+        
+        pile = Pile()
+        arbre = Arbre(0)
+        pile.empiler(self.CaseDepart)
+        while(not pile.est_vide()):
+            val = pile.depiler()
+            arbre.valeur = val
+            h = val[0]
+            l = val[1]
+
+            #TODO: Finir generation arbre
+
             
 
     def __directions_possibles(self,i,j):
@@ -415,7 +453,7 @@ class LabyEnts:
             for j in range(len(self.map[0])):
                 if self.map[i][j] == 3:
                     self.map[i][j] = 0
-                    self.game.ents.add_entity(Caisse(self, f"Caisse{str(num_caisse)}", 30, (i + 0.5, j + 0.5)))
+                    self.game.ents.add_entity(Caisse(self.game, f"Caisse{str(num_caisse)}", 30, (i + 0.5, j + 0.5)))
                     num_caisse += 1
                 if self.map[i][j] == 4:
                     self.map[i][j] = 0
