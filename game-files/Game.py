@@ -10,6 +10,7 @@ from Enemies import TrucMechant, FantomeBizare
 from Object import Sortie
 from GenerationLaby import Labyrinthe, LabyEnts
 from Minimap import Minimap
+from MenuDebut import MenuDebut
 import Maps
 
 class Game:
@@ -20,6 +21,8 @@ class Game:
         pygame.display.set_mode((WIDTH, HEIGHT))
         self.pygame_screen = pygame.display.get_surface()
         self.pygame_clock = pygame.time.Clock()
+
+        self.menuDebut = MenuDebut()
 
         self.settings = Settings()
         self.input = InputHandler(self)
@@ -42,7 +45,9 @@ class Game:
 
     def gameLoop(self):
         # Boucle principale
+        self.nouveauLaby()
         while(self.running):
+            self.menuDebut.lancement()
             self.events()
             self.pygame_screen.fill(pygame.Color(0, 0, 0), rect=pygame.Rect(0, 0, WIDTH, HEIGHT//2))            # Couleur plafond
             self.pygame_screen.fill(pygame.Color(40, 40, 40), rect=pygame.Rect(0, HEIGHT//2, WIDTH, HEIGHT//2)) # Couleur sol

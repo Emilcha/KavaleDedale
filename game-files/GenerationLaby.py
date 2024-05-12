@@ -37,7 +37,7 @@ class Pile:
         else:
             print("Pile vide !")
 
-#NON UTILISé (Pour l'instrant)
+#NON UTILISé (Pour l'instant)
 class Arbre:
     solution = None
     profondeur = 0
@@ -64,9 +64,11 @@ class Arbre:
             for ab in self.sa:
                 Arbre.__chemin_profond(ab, profondeur_courante + 1)
 
+
+
 class Labyrinthe:
     def __init__(self,longueur,hauteur):
-
+        """Initialisation des varibales"""
         self.longueur = longueur
         self.hauteur = hauteur
         self.nbSalle = longueur + hauteur
@@ -74,22 +76,22 @@ class Labyrinthe:
         
         self.CaseDepart = None
         self.CaseFinale = None
-        
+        """Initialisation de la première matrice du laby"""
         self.laby = []
         for i in range(hauteur):
             self.laby.append([2 for i in range(self.longueur)])
-       
+        """Pareil"""
         self.map = []
         for i in range(hauteur):
             self.map.append([2 for i in range(self.longueur)])
         
-       
+        """Pareil"""
         self.Minimap = []
         for i in range(self.hauteur):
             self.Minimap.append([0 for i in range(self.longueur)])
             
        
-        
+        """Pareil"""
         self.mapFinale= []
 
 
@@ -97,6 +99,8 @@ class Labyrinthe:
         
         """ 0 = Sol, 1 = Mur , 2 = Trou , 3 = Potentiel Coffre , 4 = Statue pour Sauvegarder
         """        
+        
+        """Création de tout les types de salles pouvant être parcourue dans le laby"""
         self.Salle1=  [[1,1,1,1,1,1,1,1,1,1],
                        [1,0,3,2,0,0,0,0,0,1],
                        [1,0,0,2,2,0,0,0,0,1],
@@ -218,11 +222,11 @@ class Labyrinthe:
                      [1,0,2,0,0,0,0,2,0,1],
                      [1,0,0,0,0,0,0,0,0,1],
                      [1,1,1,1,1,1,1,1,1,1]]
-
+        """On répertorie toute les salles et couloirs dans une liste"""
         self.listeCouloir = [self.Couloir1,self.Couloir2]
         self.listeSalle = [self.Salle1,self.Salle2,self.Salle3,self.Salle4,self.Salle5,self.Salle6,self.Sauvegarde1,self.Sauvegarde2]
         
-    
+    #On ne l'utilise plus, mais créer un fichier txt permettant de vérifier le bon fonctionnement du programme et la bonne génération du laby
     def ecrireFichier(self):
         f = open("ListeLaby.txt","w")
         f.write(str(self.mapFinale))
@@ -250,35 +254,37 @@ class Labyrinthe:
         while math.sqrt((self.CaseFinale[0]-self.CaseDepart[0])**2+(self.CaseFinale[1]-self.CaseDepart[1])**2) < 3:
             self.CaseFinale = (randint(0,self.hauteur - 1),randint(0,self.longueur - 1))
         return self.CaseFinale
-"""
-        minmap_arbre = [[None for j in range(self.longueur)] for i in range(self.hauteur)]
-        for i in range(self.hauteur):
-            for j in range(self.longueur):
-                listeDir = []
-                if self.map[i][j][0][4] != 1:
-                    listeDir.append('N')
-                if self.map[i][j][9][4] != 1:
-                    listeDir.append('S')
-                if self.map[i][j][4][0] != 1:
-                    listeDir.append('W')
-                if self.map[i][j][4][9] != 1:    
-                    listeDir.append('E')
 
-                minmap_arbre[i][j] = listeDir
+#Test, on ne l'utilise pas pour l'instant
+        """
+                minmap_arbre = [[None for j in range(self.longueur)] for i in range(self.hauteur)]
+                for i in range(self.hauteur):
+                    for j in range(self.longueur):
+                        listeDir = []
+                        if self.map[i][j][0][4] != 1:
+                            listeDir.append('N')
+                        if self.map[i][j][9][4] != 1:
+                            listeDir.append('S')
+                        if self.map[i][j][4][0] != 1:
+                            listeDir.append('W')
+                        if self.map[i][j][4][9] != 1:    
+                            listeDir.append('E')
         
-        pile = Pile()
-        arbre = Arbre(0)
-        pile.empiler(self.CaseDepart)
-        while(not pile.est_vide()):
-            val = pile.depiler()
-            arbre.valeur = val
-            h = val[0]
-            l = val[1]
-
-            #TODO: Finir generation arbre
-"""
+                        minmap_arbre[i][j] = listeDir
+                
+                pile = Pile()
+                arbre = Arbre(0)
+                pile.empiler(self.CaseDepart)
+                while(not pile.est_vide()):
+                    val = pile.depiler()
+                    arbre.valeur = val
+                    h = val[0]
+                    l = val[1]
+        
+                    #TODO: Finir generation arbre
+        """
             
-
+    """On regarde dans quels direction on peut casser les murs des salles disposées dans le laby"""
     def __directions_possibles(self,i,j):
         directions = []
         if i < self.hauteur -1 :
@@ -296,7 +302,8 @@ class Labyrinthe:
         return directions            
 
 
-
+    """Permet de casser les murs selon les directions possibles, 'Casser un mur' signigie en réalité 'remplacer un 1 par un 0'
+    Ici, le laby constitué est sous forme de liste de liste de liste de liste (d'où les 4 indexs)"""
     def __abattre_mur(self,i,j,dire,pile):
         for elem in dire:
             if elem == 'S' and not self.laby[i+1][j] == 'Vue':
@@ -330,7 +337,7 @@ class Labyrinthe:
 
 
 
-
+    """On génére le labyrinthe"""
     def genereLaby(self):
         pile = Pile()
         
@@ -339,7 +346,7 @@ class Labyrinthe:
         self.CaseDepart = CaseDepart
         pile.empiler(CaseDepart)
 
-#Generation des emplacements des salles et des couloirs     
+        """Generation des emplacements des salles et des couloirs     """
         while typeCase != []:
             for i in range(self.hauteur):
                 for j in range(self.longueur):
@@ -352,7 +359,7 @@ class Labyrinthe:
                                 self.map[i][j] = 3
                             except:
                                 break
-#Generation des types de salle et de couloir
+        """Generation des types de salle et de couloir"""
         for i in range(self.hauteur):
             for j in range(self.longueur):
                 if (i,j) == CaseDepart:
@@ -369,7 +376,7 @@ class Labyrinthe:
                         self.listeSalle.remove(self.Sauvegarde2)                
  
         
-#Debut generation minimap 
+        """Debut generation minimap , on note quel type de salle est où, qu'on stocke dans une liste de liste"""
         for i in range(self.hauteur):
             for j in range(self.longueur):
                 if self.map[i][j] == self.listeCouloir[0]:
@@ -463,16 +470,10 @@ class LabyEnts:
 
 
 """
+
+
 if __name__=='__main__':
     laby = Labyrinthe(5,5)
     laby.genereLaby()
     laby.ecrireFichier()
 """
-    
-
-
-
-
-
-
-
