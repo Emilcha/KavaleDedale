@@ -3,6 +3,7 @@ from random import randint
 
 class Arme:
     def __init__(self, game, name, texture_file, screen_pos, scale_factor, spread, max_distance, damage, cooldown):
+        # Variables
         self.game = game
         self.name = name
         self.texture = pygame.transform.scale_by(pygame.image.load(texture_file), scale_factor)
@@ -14,12 +15,13 @@ class Arme:
 
     def attack(self):
         ents = self.game.ents.entitys
+        # Test pour toutes les entitées
         for ent in ents:
             if ent.drawn == False:
                 continue
             vec_y = ent.y - self.game.joueur.y
             vec_x = ent.x - self.game.joueur.x
-            if math.sqrt(vec_x**2 + vec_y**2) > self.max_distance:
+            if math.sqrt(vec_x**2 + vec_y**2) > self.max_distance:  # Distance d'attaque
                 continue
             # Normaliser le vecteur
             vec_len = math.sqrt(vec_x**2 + vec_y**2)
@@ -30,7 +32,7 @@ class Arme:
             if (ent_player_angle>self.spread and ent_player_angle<360-self.spread):
                 continue
             
-            ent.health -= self.damage
+            ent.health -= self.damage   # Application des dégats a l'entité
             if DEBUG:
                 print(f"-{self.damage}hp: {ent.name} | restant: {ent.health}")
 

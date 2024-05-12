@@ -1,6 +1,7 @@
 from Global import *
 
 class Entity:
+    # Classe de base pour toute les entitées
     def __init__(self,game, name, hp, pos, texture_file):
         self.game = game
         
@@ -30,10 +31,7 @@ class Entity:
 
     def move(self):
         pass
-
-    def attack(self):
-        pass
-
+        
     def update(self):
         self.tick_count += 1
         if self.health <= 0:
@@ -44,10 +42,15 @@ class Entity:
 
 
 class Entity_Handler:
+    """
+    Gestion des entitées,
+    Liste des entitées
+    """
     def __init__(self):
         self.entitys = []
 
     def get_entity(self, name_or_index):
+        # Recuperer une entité que cela soit par l'index ou par le nom
         if isinstance(name_or_index, str):
             for ent_index in range(len(entitys)):
                 if self.entitys[ent_index].name == name:
@@ -69,6 +72,7 @@ class Entity_Handler:
         self.entitys = []
 
     def index_sorted_dist(self, joueur):
+        # Tri par distance de la classe entité (plus loin en premiere)
         dist = {}
         for ent_index in range(len(self.entitys)):
             dist[ent_index] = ((joueur.x - self.entitys[ent_index].x) **2 + (joueur.y - self.entitys[ent_index].y) **2)
@@ -78,5 +82,6 @@ class Entity_Handler:
         return sorted_ent_index
     
     def update_ents(self):
+        # Appel de l'update pour toute les entitées
         for ent in self.entitys:
             ent.update()

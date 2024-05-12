@@ -37,7 +37,7 @@ class Pile:
         else:
             print("Pile vide !")
 
-
+#NON UTILISé (Pour l'instrant)
 class Arbre:
     solution = None
     profondeur = 0
@@ -250,9 +250,7 @@ class Labyrinthe:
         while math.sqrt((self.CaseFinale[0]-self.CaseDepart[0])**2+(self.CaseFinale[1]-self.CaseDepart[1])**2) < 3:
             self.CaseFinale = (randint(0,self.hauteur - 1),randint(0,self.longueur - 1))
         return self.CaseFinale
-
-
-
+"""
         minmap_arbre = [[None for j in range(self.longueur)] for i in range(self.hauteur)]
         for i in range(self.hauteur):
             for j in range(self.longueur):
@@ -278,7 +276,7 @@ class Labyrinthe:
             l = val[1]
 
             #TODO: Finir generation arbre
-
+"""
             
 
     def __directions_possibles(self,i,j):

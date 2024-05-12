@@ -20,6 +20,7 @@ class Minimap:
                 salle_h = h//10
                 salle_w = w//10
 
+                # Changement de la couleur en fonction de la salle
                 if "SAV" in self.map_salles[salle_h][salle_w]:
                     color = pygame.Color(200,20,200)
                 elif "SPWN" in self.map_salles[salle_h][salle_w]:
@@ -29,14 +30,15 @@ class Minimap:
                 elif "C" in self.map_salles[salle_h][salle_w]:
                     color = pygame.Color(50,50,50)
 
-                if self.map_bloc[h][w] == 0:
+                if self.map_bloc[h][w] == 0:    # Si pas de mur, couleur plus sombre
                     color //= pygame.Color(2, 2, 2)
-                elif self.map_bloc[h][w] < 0:
+                elif self.map_bloc[h][w] < 0:   # Si trou couleur plus sombre
                     color //= pygame.Color(4, 4, 4)
 
                 if self.vue[salle_h][salle_w] == False:
                     color = pygame.Color(10,10,10)
 
+                # Affichage de chaque blocs
                 pygame.draw.rect(surface,
                     color,
                     (w*block_width,h*block_height,block_width,block_height))
@@ -44,9 +46,11 @@ class Minimap:
         joueur_salle_y = int(self.game.joueur.x) // 10
         joueur_salle_x = int(self.game.joueur.y) // 10
 
+        # Affichage de la salle quand le joueur rentre
         if self.vue[joueur_salle_y][joueur_salle_x] == False:
             self.vue[joueur_salle_y][joueur_salle_x] = True
 
+        # Rectangle jaune salle active
         pygame.draw.rect(surface,
                     pygame.Color(255,255,0),
                     (
@@ -55,7 +59,10 @@ class Minimap:
                     ),
                     width = 1)
 
+        # Point blanc position du joueur
         pygame.draw.rect(surface,
                     pygame.Color(255,255,255),
                     (int(self.game.joueur.y*block_width)-1,int(self.game.joueur.x*block_height)-1,2,2))
+
+
         return surface

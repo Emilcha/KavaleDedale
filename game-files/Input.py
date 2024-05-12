@@ -10,6 +10,7 @@ class InputHandler:
         self.mouse_up_callback = {}
 
     def __convertKeyNum(self, num):
+        # Corection index touches suite a une maj de pygame
         # https://github.com/pygame/pygame/blob/main/src_c/key.c -> pg_key_and_name[]
         if num >= 1073741881:
             num -= 1073741881 - 128
@@ -24,19 +25,19 @@ class InputHandler:
                 keyCode = self.__convertKeyNum(event.key)
                 self.keys[keyCode] = True
                 if keyCode in self.key_down_callback:
-                    self.key_down_callback[keyCode]()
+                    self.key_down_callback[keyCode]() # Appel d'un fonction lié a la touche
 
             elif event.type == pygame.KEYUP:
                 keyCode = self.__convertKeyNum(event.key)
                 self.keys[keyCode] = False
                 if keyCode in self.key_up_callback:
-                    self.key_up_callback[keyCode]()
+                    self.key_up_callback[keyCode]() # Appel d'un fonction lié a la touche
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 for key, elm in self.mouse_up_callback.items():
                     if elm["key"]==event.button:
                         if elm["rect"].collidepoint(event.pos):
-                            elm["callback"]()
+                            elm["callback"]() # Appel d'un fonction lié au clic a une certaine position
 
 
     def setKDownCallback(self, key, callback):
@@ -61,7 +62,7 @@ class InputHandler:
         return appendID
 
     def removeMUpCallback(self, idCb):
-        self.mouse_up_callback[idCb]
+        self.mouse_up_callback[idCb]["callback"] = lambda: 0
 
     def isPressed(self, key):
         if self.input_enabled:

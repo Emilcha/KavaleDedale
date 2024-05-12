@@ -3,15 +3,18 @@ from Global import *
 class Render:
     def __init__(self, game):
         self.game = game
+        # Distance au mur pour chaque ligne verticale de l'ecran: pour affichage entitées
         self.z_buffer = [None for i in range(WIDTH)]
         self.weapon_bobbing_i = 0
 
     def rendu_entite(self):
+        #Rendu des entité de la plus loin a la plus proche
         sorted_ent = self.game.ents.index_sorted_dist(self.game.joueur)
         joueur = self.game.joueur
 
+        #Pour chanque entité (plus loin à plus proche)
         for paire in sorted_ent:
-            ent = self.game.ents.get_entity(paire[0])
+            ent = self.game.ents.get_entity(paire[0])   # Récuperer l'instance de l'entité
             ent.drawn = False
             dist = paire[1] # Distance au joueur
             if dist < 0.07: continue
@@ -25,13 +28,13 @@ class Render:
             transformX = inv_det * (joueur.dirY * rel_pos_x - joueur.dirX * rel_pos_y)
             transformY = inv_det * (-joueur.camPlaneY * rel_pos_x + joueur.camPlaneX * rel_pos_y)
             
-            if transformY <= 0: continue
+            if transformY <= 0: continue    # Si l'entité est deriere le joueur: ne pas l'afficher
             
             spriteScreenX = int((WIDTH / 2) * (1 + transformX / transformY))
 
             spriteHeight = abs(int(HEIGHT / (transformY)))
 			
-            if spriteHeight >= 5*HEIGHT: continue
+            if spriteHeight >= 5*HEIGHT: continue   # Si l'entité fait plus de 5 fois la taille de l'ecran: ne pas l'afficher
 
             offY = 0
             drawStartY = -spriteHeight / 2 + HEIGHT / 2
@@ -43,9 +46,6 @@ class Render:
 
             spriteWidth = abs( int(HEIGHT / (transformY)))
             
-            if spriteHeight > 10000 or spriteWidth > 10000: # FIX FOR OUT OF MEMORY
-                continue            
-            
             offX = 0
             drawStartX = -spriteWidth / 2 + spriteScreenX
             drawEndX = spriteWidth / 2 + spriteScreenX
@@ -54,6 +54,7 @@ class Render:
                 drawStartX = 0
             if drawEndX >= WIDTH : drawEndX = WIDTH - 1
             
+            # Ne pas afficher l'entité si en dehors de l'ecran
             if drawStartX >= WIDTH: continue
             if drawEndX <= 0: continue
 
@@ -61,6 +62,7 @@ class Render:
             i = 0
             offset_start = -1
 
+            # Géneration de slices de l'image de l'entité
             while i < drawEndX - drawStartX:
                 x_indx = int(drawStartX + i)
                 if x_indx > WIDTH:
@@ -85,11 +87,17 @@ class Render:
 
             ent.drawn = True
 
+            # Affichage des slices
             for debut, fin in draw_offsets:
                 self.add(ent_surface_scale, (drawStartX + debut,drawStartY), pygame.Rect(debut + offX, offY, fin, spriteHeight))
 
 
     def rendu_armes(self):
+        """
+        Affichage de l'arme:
+        Deplacement haut-bas de l'arme quand le joueur se déplace grace a une fonction
+        sinusoidale.
+        """
         arme = self.game.joueur.arme
         texture = arme.texture
         position = arme.screen_pos
@@ -107,6 +115,11 @@ class Render:
 
 
     def rendu(self):
+        """
+        Rendu du monde:
+        Calcul pour chaque ligne verticale la distance orthogonale au plan de la camera
+        Affichage de ligne de taille proportionelle a la distance
+        """
         for scr_w in range(WIDTH):
             cameraX = 2 * scr_w / WIDTH - 1
             rayDirX = self.game.joueur.dirX + self.game.joueur.camPlaneX * cameraX
@@ -141,6 +154,7 @@ class Render:
                 sideDistY = (mapY + 1 - self.game.joueur.y) * deltaDistY
 
 
+            #Algorithme de détection du point de colision rayon-mur
             hit = 0
             while not hit:
                 if sideDistX < sideDistY:
@@ -190,6 +204,7 @@ class Render:
                 g = 200
                 b = 200
             
+            # Fausse ombre
             if side == 1:
                 r//=2
                 g//=2
@@ -201,4 +216,5 @@ class Render:
                              (scr_w, lineEnd))
 
     def add(self, surface_to_add, dest = (0,0), rect = None):
+        #Racourcis pour blit sur la surface de la fenetre
         self.game.pygame_screen.blit(surface_to_add, dest, rect)
