@@ -59,7 +59,7 @@ class Caisse(Entity):
         Sinon on fait apparaître son contenu
         """
         if self.content == []:
-            fantomeSpawn = random.randint(0,2)
+            fantomeSpawn = random.randint(0,1)
             if fantomeSpawn == 1:
                 position_fantome = (self.x + random.uniform(-10, 10), self.y + random.uniform(-10, 10))
                 self.game.ents.add_entity(FantomeBizare(self.game, self.name + '_fantome', position_fantome))
