@@ -440,11 +440,11 @@ class Labyrinthe:
 #Generation aleatoire des monstres
         for i in range(self.hauteur):
             for j in range(self.longueur):
-                if self.map[i][j] != self.Spawn and self.map[i][j] != self.Sauvegarde1 and self.map[i][j] != self.Sauvegarde2:
+                if not self.map[i][j] == self.Spawn:
                     for k in range(10):
                         for l in range(10):
                             if self.map[i][j][k][l] == 0:
-                                a = randint(1,30)
+                                a = randint(1,20)
                                 if a == 1:
                                     self.map[i][j][k][l] = 5
 
