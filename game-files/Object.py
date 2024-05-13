@@ -68,33 +68,64 @@ class Caisse(Entity):
 
 class Objet_au_sol(Entity):
     def __init__(self, game, name, pos, type_object):
+        """Initialisation d'une entité en fonction du type d'objet"""
         if type_object == 'Heal Potion':
             self.type_obj = 'Heal Potion'
             super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_HealPotion.png")
-        
+
         if type_object == 'Stamina Potion':
             self.type_obj = 'Stamina Potion'
             super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_StaminaPotion.png")
-        
+
         if type_object == 'Damage Potion':
             self.type_obj = 'Damage Potion'
-            super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_DamagePotion.png")        
+            super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_DamagePotion.png")
+
         if type_object == 'Zeus':
             self.type_obj = 'Zeus'
             super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_Zeus.png")
-        
+
         if type_object == 'Poseidon':
             self.type_obj = 'Poseidon'
             super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_Trident.png")
-        
+
         if type_object == 'Spartan':
             self.type_obj = 'Spartan'
             super().__init__(game, name, 10000, pos, "game-files/img/ents/Obj_Epee.png")
 
+    def use_object(self):
+        """Les potions ont un effet sur le joueur"""
+        if self.type_obj == 'Heal Potion':
+            if self.game.joueur.vie + 20 < 100:
+                self.game.joueur.vie += 20
+            elif self.game.joueur.vie < 100:
+                self.game.joueur.vie = 100
+
+        if self.type_obj == 'Stamina Potion':
+            if self.game.joueur.stamina + 0.5 < 1:
+                self.game.joueur.stamina += 0.5
+            elif self.game.joueur.stamina < 1:
+                self.game.joueur.stamina = 1
+
+        if self.type_obj == 'Damage Potion':     #TODO Damage Potion est une potion de vitesse
+            self.game.joueur.potionEffect += 1
+
+        """Les armes sont ajoutées à l'inventaire"""
+        if self.type_obj == 'Zeus':
+            self.game.joueur.inv.ajouter(self.type_obj)
+
+        if self.type_obj == 'Poseidon':
+            self.game.joueur.inv.ajouter(self.type_obj)
+
+        if self.type_obj == 'Spartan':
+            self.game.joueur.inv.ajouter(self.type_obj)
+
+
     def update(self):
+        """On vérifie la distance au joueur, s'il est suffisamment proche il ramasse l'objet"""
         vec_y = self.y - self.game.joueur.y
         vec_x = self.x - self.game.joueur.x
         vec_len = math.sqrt(vec_x**2 + vec_y**2)
         if vec_len < 0.5:
-            self.game.joueur.inv.ajouter(self.type_obj)
+            self.use_object()
             self.kill()
