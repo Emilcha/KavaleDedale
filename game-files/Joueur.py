@@ -21,6 +21,7 @@ class Joueur:
 
         self.isMoving = False
         self.isRunning = False
+        self.potionEffect = 0   #Potion de vitesse inactive à l'initialisation
         #positionement vertical : HEIGHT-Hauteur fichier*scale+corection bobbing  
         self.arme = Arme(self.game, "Poing", "game-files/img/wep/poing.png", ((WIDTH//5)*3, HEIGHT-79*7+10), 7, 10, 1, 10, 10)
         self.frames_since_last_attack = 0
@@ -29,15 +30,27 @@ class Joueur:
     def getSpeed(self):
         """
         Renvoie la vitesse a laquel faire avancer le joueur en fonction du stamina et de la touche pour courir
+        Si la potion de vitesse est active le retour est plus élevé
         """
-        if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
-            self.isRunning = True
-            self.stamina -= 0.01
-            if self.stamina<=0:
-                self.canRun = False
-            return self.game.settings["move_speed_sprinting"]
-        self.isRunning = False
-        return self.game.settings["move_speed"]
+        if self.potionEffect > 0:
+            self.potionEffect -= 0.02
+            if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
+                self.isRunning = True
+                self.stamina -= 0.01
+                if self.stamina<=0:
+                    self.canRun = False
+                return self.game.settings["move_speed_sprinting_potion"]
+            self.isRunning = False
+            return self.game.settings["move_speed_potion"]
+        else:
+            if self.game.input.isPressed(self.game.settings["key_sprint"]) and self.canRun == True:
+                self.isRunning = True
+                self.stamina -= 0.01
+                if self.stamina<=0:
+                    self.canRun = False
+                return self.game.settings["move_speed_sprinting"]
+            self.isRunning = False
+            return self.game.settings["move_speed"]
 
     def goForward(self):
         # Trigonometrie (self.dirX = cos(angle du joueur)) (self.dirY = sin(angle du joueur))
