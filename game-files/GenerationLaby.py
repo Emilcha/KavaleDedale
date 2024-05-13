@@ -1,4 +1,5 @@
 from Object import Caisse
+from Enemies import TrucMechant
 from random import randint, choice
 import math
 import copy
@@ -436,6 +437,16 @@ class Labyrinthe:
                             a = randint(1,2)
                             if a == 1:
                                 self.map[i][j][k][l] = 0
+#Generation aleatoire des monstres
+        for i in range(self.hauteur):
+            for j in range(self.longueur):
+                if self.map[i][j] != self.Spawn and self.map[i][j] != self.Sauvegarde1 and self.map[i][j] != self.Sauvegarde2:
+                    for k in range(10):
+                        for l in range(10):
+                            if self.map[i][j][k][l] == 0:
+                                a = randint(1,30)
+                                if a == 1:
+                                    self.map[i][j][k][l] = 5
 
         
 #Compilation de toutes les listes        
@@ -454,12 +465,19 @@ class LabyEnts:
 
     def gen_ents(self):
         num_caisse = 1
+        num_mob    = 1
         for i in range(len(self.map)):
             for j in range(len(self.map[0])):
+                #Ajout des caisses
                 if self.map[i][j] == 3:
                     self.map[i][j] = 0
                     self.game.ents.add_entity(Caisse(self.game, f"Caisse{str(num_caisse)}", 30, (i + 0.5, j + 0.5)))
                     num_caisse += 1
+                #Ajout des momies
+                if self.map[i][j] == 5:     
+                    self.map[i][j] = 0
+                    self.game.ents.add_entity(TrucMechant(self.game, f"Monstre{str(num_mob)}", 100, (i + 0.5, j + 0.5)))
+                    num_mob += 1
                 if self.map[i][j] == 4:
                     self.map[i][j] = 0
                     # Entité statue sauvgarde
