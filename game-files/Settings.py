@@ -24,8 +24,8 @@ class Settings:
         self.settings["move_speed_sprinting"]   = 0.09
         self.settings["rotate_speed"]           = 0.035
 
-        self.settings["move_speed_potion"]             = 0.10
-        self.settings["move_speed_sprinting_potion"]   = 0.15
+        self.settings["move_speed_potion"]             = 0.08
+        self.settings["move_speed_sprinting_potion"]   = 0.13
         self.settings["rotate_speed_potion"]           = 0.055
 
         # Parametrage des touches
