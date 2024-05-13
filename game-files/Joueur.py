@@ -114,6 +114,10 @@ class Joueur:
             self.stamina = 1
             self.canRun = True
             
+        if self.vie <= 0:
+            a = GAME_OVER(self.game)
+            a.loop()
+            
         self.frames_since_last_attack += 1
 
 
