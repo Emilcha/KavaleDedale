@@ -41,22 +41,23 @@ class HUD:
 
         self.barre_sprint.rendu(self.hudSurface)
 
-        self.Lucida_Console.textToSurface(self.hudSurface,
-            f"ANGLE° | {str(self.game.joueur.get_angle_deg())}",
-            0, HEIGHT - 175,
-            pygame.Color(10,255,120))
-        self.Lucida_Console.textToSurface(self.hudSurface,
-            f"X | {str(self.game.joueur.x)}",
-            0, HEIGHT - 150,
-            pygame.Color(10,255,120))
-        self.Lucida_Console.textToSurface(self.hudSurface,
-            f"Y | {str(self.game.joueur.y)}",
-            0, HEIGHT - 125,
-            pygame.Color(10,255,120))
-        self.Lucida_Console.textToSurface(self.hudSurface,
-            f"Stamina | {str(int(self.game.joueur.stamina * 100))}",
-            0, HEIGHT - 100,
-            pygame.Color(10,255,120))
+        if DEBUG:
+            self.Lucida_Console.textToSurface(self.hudSurface,
+                f"ANGLE° | {str(self.game.joueur.get_angle_deg())}",
+                0, HEIGHT - 175,
+                pygame.Color(10,255,120))
+            self.Lucida_Console.textToSurface(self.hudSurface,
+                f"X | {str(self.game.joueur.x)}",
+                0, HEIGHT - 150,
+                pygame.Color(10,255,120))
+            self.Lucida_Console.textToSurface(self.hudSurface,
+                f"Y | {str(self.game.joueur.y)}",
+                0, HEIGHT - 125,
+                pygame.Color(10,255,120))
+            self.Lucida_Console.textToSurface(self.hudSurface,
+                f"Stamina | {str(int(self.game.joueur.stamina * 100))}",
+                0, HEIGHT - 100,
+                pygame.Color(10,255,120))
         
 
         #TODO: Barre de vie rendu -> blit sur hudSurface
