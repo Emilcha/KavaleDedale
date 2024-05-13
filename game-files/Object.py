@@ -1,5 +1,6 @@
 from Global import *
 from Entity import Entity
+from Enemies import FantomeBizare
 
 class Sortie(Entity):
     def __init__(self, game, pos):
@@ -53,11 +54,21 @@ class Caisse(Entity):
 
     def kill(self):
         num_potion = 1
-
-        for elt in self.content:
-            newPos = (self.x + random.uniform(-0.5, 0.5), self.y + random.uniform(-0.5, 0.5))
-            self.game.ents.add_entity(Objet_au_sol(self.game, self.name + "_" + f"elt{str(num_potion)}", newPos, elt))
-            num_potion += 1
+        """
+        Si la caisse était vide, on donne une petite chance qu'un fantome apparaisse
+        Sinon on fait apparaître son contenu
+        """
+        if self.content == []:
+            fantomeSpawn = random.randint(0,2)
+            if fantomeSpawn == 1:
+                position_fantome = (self.x + random.uniform(-10, 10), self.y + random.uniform(-10, 10))
+                self.game.ents.add_entity(FantomeBizare(self.game, self.name + '_fantome', position_fantome))
+                print('Un fantome vous suit')
+        else:
+            for elt in self.content:
+                newPos = (self.x + random.uniform(-0.5, 0.5), self.y + random.uniform(-0.5, 0.5))
+                self.game.ents.add_entity(Objet_au_sol(self.game, self.name + "_" + f"elt{str(num_potion)}", newPos, elt))
+                num_potion += 1
 
         self.game.ents.del_entity(self.name)
 
