@@ -19,10 +19,14 @@ class Settings:
         #Images par seconde maximale, a diminuer si le jeu change de vitesse
         self.settings["maxfps"]         = 60
 
-        # Vitesse de déplacement et de rotation de la camera
+        # Vitesse de déplacement et de rotation de la camera avec et sans potion
         self.settings["move_speed"]             = 0.04
         self.settings["move_speed_sprinting"]   = 0.09
         self.settings["rotate_speed"]           = 0.035
+
+        self.settings["move_speed_potion"]             = 0.10
+        self.settings["move_speed_sprinting_potion"]   = 0.15
+        self.settings["rotate_speed_potion"]           = 0.055
 
         # Parametrage des touches
         #Avancer
