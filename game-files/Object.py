@@ -1,6 +1,7 @@
 from Global import *
 from Entity import Entity
 from Enemies import FantomeBizare
+from Successful_Game import *
 
 class Sortie(Entity):
     def __init__(self, game, pos):
@@ -40,7 +41,8 @@ class Sortie(Entity):
             vec_x = self.x - self.game.joueur.x
             vec_len = math.sqrt(vec_x**2 + vec_y**2)
             if vec_len < 0.5:
-                print(f'LE JOUEUR A FINI LE LABY')
+                a = VICTORY(HEIGHT,WIDTH,self.game)
+                a.loop()
 
 class Caisse(Entity):
     def __init__(self, game, name, hp, pos):
