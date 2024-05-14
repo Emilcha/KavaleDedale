@@ -62,7 +62,7 @@ class Caisse(Entity):
             fantomeSpawn = random.randint(0,1)
             if fantomeSpawn == 1:
                 position_fantome = (self.x + random.uniform(-10, 10), self.y + random.uniform(-10, 10))
-                self.game.ents.add_entity(FantomeBizare(self.game, self.name + '_fantome', position_fantome))
+                self.game.ents.add_entity(FantomeBizare(self.game, self.name + '_fantome', 30, position_fantome))
                 print('Un fantome vous suit')
         else:
             for elt in self.content:
