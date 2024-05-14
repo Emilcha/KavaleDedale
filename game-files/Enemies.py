@@ -44,7 +44,7 @@ class FantomeBizare(Entity):
         vec_x = self.x - self.game.joueur.x
         # Normaliser le vecteur
         vec_len = math.sqrt(vec_x**2 + vec_y**2)
-        if vec_len>= 6:
+        if vec_len>= 10:
             self.texture_index = 1
             return
         vec_x /= vec_len
